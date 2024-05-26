@@ -1,7 +1,8 @@
-import { config } from '../config.js';
+import { config,GetToken } from '../config.js';
 
 export async function fetchUsers() {
     try {
+        // console.log(GetToken())
         const response = await fetch(`${config.API_BASE_URL}/User/`, {
             method: 'GET',
             mode: 'cors',
@@ -10,7 +11,7 @@ export async function fetchUsers() {
             headers: {
                 'ngrok-skip-browser-warning':69420,
                 'Content-Type': 'application/json',
-                "Authorization": `Bearer ${config.TOKEN}`
+                "Authorization": `Bearer ${GetToken()}`
             },
         });
 

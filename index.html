@@ -9,24 +9,23 @@
 </head>
 <body>
     <div id="canvas">
-        
     </div>
-
-    <div class="popup ">
-        <form class="userLogin" action="#">
+    <div class="popup active">
+        <form class="userLogin" id="userLoginForm" action="#">
             <div class="userLogin__userName">
-                <label for="username">Kullanıcı İsmi</label>
-                <input type="test" name="username" id="username">
+                <label for="username" required>Kullanıcı İsmi</label>
+                <input type="test" name="username" id="username" required>
             </div>
             <div class="userLogin__password">
-                <label for="password">Şifre</label>
-                <input type="password" name="password" id="password">        
+                <label for="password" required>Şifre</label>
+                <input type="password" name="password" id="password" required>        
             </div>
-            <button class="userLogin__submit" type="submit">Giriş</button>
+            <button class="userLogin__submit" id="loginBtn" type="button">Giriş</button>
         </form>
     </div>
     
     <script src="./node_modules/@microsoft/signalr/dist/browser/signalr.js" type="module"></script>
     <script src="js/index.js" type="module"></script>
+    <script src="js/login.js" type="module"></script>
 
 </body></html>

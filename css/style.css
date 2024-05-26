@@ -16,7 +16,7 @@
 }
 .popup.active {
   opacity: 1;
-  pointer-events: none;
+  pointer-events: all;
 }
 .popup .userLogin {
   display: flex;
@@ -49,6 +49,7 @@
   border: none;
   background-color: cyan;
   transition: 0.45s;
+  cursor: pointers;
 }
 .popup .userLogin button:hover {
   background-color: lightblue;

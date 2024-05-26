@@ -1,5 +1,6 @@
 import { EVENTS } from '../constants.js';
-//container : element that will be rendering inside of 
+import { getChattingUserId } from '../services/valueHelper.js';
+//container : element that will be rendering inside of
 //data : component data
 export class SidePanelComponent {
     constructor(container, sidepanelData,currentUserId) {
@@ -9,13 +10,13 @@ export class SidePanelComponent {
         this.addEventListeners();
     }
     render(data) {
-        //.user active --> aktif konuşma 
+        //.user active --> aktif konuşma
         // if (config.USER_ID == r.fromId) {
         //         messageNode.style.alignSelf = 'flex-end';
         //     }
-        console.log(this.data)
-        var postUser = this.data.find(x => x.id == this.currentUserId);
-        console.log("postUser : ", postUser); 
+        // console.log(this.data)
+        var postUser = this.data.find(x => x.id == 6);
+        // console.log("postUser : ", postUser);
         const sidePanelHtml = `
                 <div id="sidePanel__head">
                     <div class="headUtility">
@@ -49,7 +50,7 @@ export class SidePanelComponent {
                                 <div class="user__name">${user.username}</div>
                                 <div class="user__latestMessage">${user.latestMessage ? user.latestMessage.messageText : ""}</div>
                             </li>
-                            `).join('')}                           
+                            `).join('')}
                         </ul>
                 </div>
                 <div class="userProfile">
@@ -72,8 +73,8 @@ export class SidePanelComponent {
 
     addEventListeners() {
         const userElements = this.container.querySelectorAll('.user');
-        console.log(this.container)
-        console.log(userElements)
+        // console.log(this.container)
+        // console.log(userElements)
         userElements.forEach(element => {
             element.addEventListener('click', (e) => {
                 const userId = element.dataset.userId;

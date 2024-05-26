@@ -17,7 +17,7 @@
     
     &.active{
         opacity: 1;
-        pointer-events: none;    
+        pointer-events: all;    
     }
 
     .userLogin{
@@ -59,6 +59,8 @@
             background-color: cyan;
 
             transition: .45s;
+
+            cursor: pointers;
 
             &:hover{
                 background-color: lightblue;

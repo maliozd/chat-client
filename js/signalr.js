@@ -1,13 +1,14 @@
-import { config } from './config.js';
-
+import { GetToken, config } from './config.js';
+import { RECEIVE_FUNCTION_NAMES } from './constants.js';
 export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://cfce-85-100-65-34.ngrok-free.app/hubs/messagehub", {
-        accessTokenFactory: async () => config.TOKEN,
+    .withUrl("http://localhost:8080/hubs/messagehub", {
+        accessTokenFactory: async () => GetToken(),
         withCredentials: true,
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
         headers: {
-            "Access-Control-Allow-Origin": "http://127.0.0.1:8080",
+            "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+            'ngrok-skip-browser-warning': 69420,
             "credentials": 'include',
             "crossorigin": true
         }
@@ -28,7 +29,7 @@ connection.onclose(async () => {
     // await startConnection();
 });
 
-export const messageReceived = connection.on("MessageReceived", (message) => {
+export const messageReceived = connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
     const messages = JSON.parse(localStorage.getItem('messages'));
     messages.push({
         messageText: message.message,

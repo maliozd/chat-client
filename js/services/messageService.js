@@ -1,4 +1,4 @@
-import { config } from '../config.js';
+import { GetToken, config } from '../config.js';
 
 export async function fetchMessages() {
     try {
@@ -8,28 +8,27 @@ export async function fetchMessages() {
             cache: 'no-cache',
             credentials: 'same-origin',
             headers: {
-                'ngrok-skip-browser-warning':69420,
+                // 'ngrok-skip-browser-warning':69420,
                 'Content-Type': 'application/json',
-                "Authorization": `Bearer ${config.TOKEN}`
+                "Authorization": `Bearer ${GetToken()}`
             },
         });
         return response.json();
     } catch (error) {
         console.error(error)
     }
-
 }
 
-export async function sendMessage(message) {
+export async function sendChatMessage(message) {
     await fetch(`${config.API_BASE_URL}/Message/`, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
-            'ngrok-skip-browser-warning':69420,
+            // 'ngrok-skip-browser-warning':69420,
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${config.TOKEN}`
+            "Authorization": `Bearer ${GetToken()}`
 
         },
         redirect: 'follow',
