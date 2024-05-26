@@ -1,0 +1,145 @@
+:root {
+    --deviceWidth: 1920px;
+    --deviceHeight: 1080px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    background-color: #289;
+    overflow: hidden;
+}
+
+#canvas {
+    display: grid;
+    width: var(--deviceWidth);
+    height: var(--deviceHeight);
+    grid-template-columns: 300px 1fr;
+}
+
+#canvas * {
+    width: 100%;
+    /* outline: 1px solid rgb(243, 137, 8); */
+}
+
+#canvas .sidePanel {
+    display: grid;
+    grid-template-rows: 100px 1fr;
+    background-color: rgb(120, 125, 127) !important;
+
+    height: 100%;
+    width: 100%;
+}
+
+#canvas .mainPanel {
+    display: grid;
+    grid-template-rows: 100px 1fr;
+
+    height: 100%;
+    width: 100%;
+    padding: 0 10px;
+}
+
+#canvas .messages .messages__list {
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: calc(var(--deviceHeight) - 170px);
+    overflow: auto;
+}
+
+#canvas .messages .messages__list .message {
+    padding: 7px 12px;
+    width: max-content;
+    background-color: rgb(206, 184, 184);
+    color: rgb(155, 24, 111);
+    border-radius: 99999px;
+}
+
+#canvas .messages {
+    position: relative;
+    height: 100%;
+}
+
+#canvas .messages__input {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+#canvas #txtChatInput {
+    height: 50px;
+    background-color: white;
+    border-radius: 100px;
+    border: 0;
+}
+
+.sidePanel {
+    background-color: #836868;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 300px;
+}
+
+#sidePanel__head {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.user {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+ul:hover {
+    border-radius: 10px;
+    border: 0.6px solid rgb(90, 66, 93);
+    box-shadow: #1a0101;
+}
+
+.user__picture img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user__name {
+    font-weight: bold;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user__latestMessage {
+    flex-grow: 2;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
