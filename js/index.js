@@ -2,19 +2,33 @@ import { connection, startConnection } from './signalr.js';
 import { fetchUsers } from './services/userService.js';
 import { fetchMessages, sendMessage } from './services/messageService.js';
 import { config } from './config.js';
-import {SidePanel} from './sidePanel.js'
+import { SidePanelComponent } from './components/sidePanelComponent.js'
+import { MessagesComponent } from './components/messagesComponent.js'
+import { MessageInputComponent } from './components/messageInputComponent.js'
+import { EVENTS } from './constants.js';
 
+let deviceWidth;
+let deviceHeight;
+
+function calcSize(width, height) {
+    deviceWidth = width;
+    deviceHeight = height;
+
+    document.body.style.setProperty('--deviceWidth', `${deviceWidth}px`);
+    document.body.style.setProperty('--deviceHeight', `${deviceHeight}px`);
+}
+
+window.addEventListener('resize', () => {
+    calcSize(window.innerWidth, window.innerHeight);
+})
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const response = await fetch('/layouts/layout.html');
-    const layout = await response.text();
-    document.getElementById('canvas').innerHTML = layout;
+    calcSize(window.innerWidth, window.innerHeight);
+
+    await loadLayout();
 
     const userResponse = await fetchUsers();
     const messagesResponse = await fetchMessages();
-
-    console.log(userResponse);
-    console.log(messagesResponse);
 
     const sidePanelData = userResponse.map(user => {
         const latestMessage = messagesResponse
@@ -23,90 +37,69 @@ document.addEventListener('DOMContentLoaded', async () => {
         return { ...user, latestMessage };
     });
 
-    console.log(sidePanelData);
+    var latestMessage = messagesResponse
+        .filter(message => message.fromId === config.USER_ID)
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
 
+    renderSidePanel(sidePanelData);
+    sidePanelDiv.addEventListener(EVENTS.USER_SELECTED, (event) => {
+        console.log(event)
+        const userId = event.detail.userId;
+        console.log('Selected user ID:', userId);
+        //TODO 
+        // handleUserSelection(userId);
+    });
+    // var latestMessage = messagesResponse.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]
 
     localStorage.setItem('messages', JSON.stringify(sidePanelData));
     localStorage.setItem('sidePanel_Data', JSON.stringify(userResponse));
 
     await startConnection();
-    renderPage();
 
 
-    const sidePanel = new SidePanel('sidePanelDiv');
-    sidePanel.render(sidePanelData);
+    var messagesDiv = document.querySelector('.messages');
+    const messagesComponent = new MessagesComponent(messagesDiv, messagesResponse);
+    messagesComponent.render();
 
-    const inputField = document.getElementById('txtChatInput');
-    inputField.addEventListener('keypress', handleEnterKeyPress);
-});
 
-const handleEnterKeyPress = async (event) => {
-    if (event.key === 'Enter') {
-        const inputField = document.getElementById('txtChatInput');
-        const message = {
-            messageText: inputField.value,
+    const messageInputComponent = new MessageInputComponent(messagesDiv);
+    messageInputComponent.render();
+
+    messageInputComponent.addEventListener(async (message) => {
+        const message1 = {
+            messageText: message,
             fromUserId: config.USER_ID,
             toUserId: 7,
         };
-
-        await sendMessage(message);
-
-        const newMessage = {
-            message: inputField.value,
-            fromName: 'alperen31',
-            fromId: config.USER_ID,
+        await sendMessage(message1);
+        const lsMessages = JSON.parse(localStorage.getItem('messages'));
+        lsMessages.push({
+            messageText: message.message,
+            fromName: message.fromName,
+            fromId: message.fromId,
             timestamp: new Date().getTime(),
-        };
+        });
+        messagesComponent.render(lsMessages);
+    })
+});
 
-        inputField.value = null;
-        addMessage(newMessage);
-    }
-};
 
-const addMessage = async (message) => {
-    const messages = JSON.parse(localStorage.getItem('messages'));
-    messages.push({
-        messageText: message.message,
-        fromName: message.fromName,
-        fromId: message.fromId,
-        timestamp: new Date().getTime(),
-    });
-    localStorage.setItem('messages', JSON.stringify(messages));
-    await renderPage();
-};
 
-async function renderPage() {
-    console.log('rendering');
-    let deviceWidth = window.innerWidth;
-    let deviceHeight = window.innerHeight;
 
-    document.body.style.setProperty('--deviceWidth', `${deviceWidth}px`);
-    document.body.style.setProperty('--deviceHeight', `${deviceHeight}px`);
 
-    let messagelist = document.querySelector('.messages__list');
-    let messageEach = document.querySelector('.message');
 
-    const messages = JSON.parse(localStorage.getItem('messages'));
-    messagelist.innerHTML = '';
-
-    
-
-    messages.forEach(r => {
-        let messageNode = messageEach.cloneNode(true);
-        messageNode.innerHTML = r.messageText;
-
-        if (config.USER_ID == r.fromId) {
-            messageNode.style.alignSelf = 'flex-end';
-        }
-
-        messagelist.appendChild(messageNode);
-    });
-    messagelist.scrollTop = messagelist.scrollHeight;
+function renderSidePanel(sidePanelData) {
+    const sidePanelDiv = document.getElementById('sidePanelDiv');
+    const sidePanel = new SidePanelComponent(
+        sidePanelDiv,
+        sidePanelData,
+        config.USER_ID
+    );
+    sidePanel.render();
 }
 
-function parseTimestamp(timestamp) {
-    const [datePart, timePart] = timestamp.split(' ');
-    const [day, month, year] = datePart.split('.').map(Number);
-    const [hours, minutes, seconds] = timePart.split(':').map(Number);
-    return new Date(year, month - 1, day, hours, minutes, seconds);
+async function loadLayout() {
+    const responseLayout = await fetch('/layouts/layout.html');
+    const layout = await responseLayout.text();
+    document.getElementById('canvas').innerHTML = layout;
 }
