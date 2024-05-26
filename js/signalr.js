@@ -1,13 +1,13 @@
 import { config } from './config.js';
 
 export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:7145/hubs/messagehub", {
+    .withUrl("https://cfce-85-100-65-34.ngrok-free.app/hubs/messagehub", {
         accessTokenFactory: async () => config.TOKEN,
         withCredentials: true,
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
         headers: {
-            "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+            "Access-Control-Allow-Origin": "http://127.0.0.1:8080",
             "credentials": 'include',
             "crossorigin": true
         }

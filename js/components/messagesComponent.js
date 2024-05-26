@@ -6,14 +6,15 @@ export class MessagesComponent {
     }
    
     render() {
-        const messagesHtml = `<ul class="messages__list">
+        const messagesHtml = `
             ${this.data.map(message => 
                 `<li class="message" style="align-self: ${this.activeUserId == message.fromId ? 'flex-end' : 'flex-start'}">
                     ${message.messageText}
                 </li>`
             ).join('')}
-        </ul>`;
+            `;
 
+        this.container.innerHTML = '';
         this.container.innerHTML += messagesHtml;
         this.scrollToBottom();
     }

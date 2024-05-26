@@ -56,13 +56,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await startConnection();
 
-
-    var messagesDiv = document.querySelector('.messages');
+    var wrapper = document.querySelector('.messages');
+    var messagesDiv = document.querySelector('.messages__list');
     const messagesComponent = new MessagesComponent(messagesDiv, messagesResponse);
     messagesComponent.render();
 
-
-    const messageInputComponent = new MessageInputComponent(messagesDiv);
+    const messageInputComponent = new MessageInputComponent(wrapper);
     messageInputComponent.render();
 
     messageInputComponent.addEventListener(async (message) => {
@@ -82,11 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         messagesComponent.render(lsMessages);
     })
 });
-
-
-
-
-
 
 function renderSidePanel(sidePanelData) {
     const sidePanelDiv = document.getElementById('sidePanelDiv');
