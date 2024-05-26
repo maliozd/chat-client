@@ -8,6 +8,7 @@ export async function fetchMessages() {
             cache: 'no-cache',
             credentials: 'same-origin',
             headers: {
+                'ngrok-skip-browser-warning':69420,
                 'Content-Type': 'application/json',
                 "Authorization": `Bearer ${config.TOKEN}`
             },
@@ -26,6 +27,7 @@ export async function sendMessage(message) {
         cache: 'no-cache',
         credentials: 'same-origin',
         headers: {
+            'ngrok-skip-browser-warning':69420,
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${config.TOKEN}`
 
