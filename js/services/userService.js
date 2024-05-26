@@ -8,6 +8,7 @@ export async function fetchUsers() {
             cache: 'no-cache',
             credentials: 'same-origin',
             headers: {
+                'ngrok-skip-browser-warning':69420,
                 'Content-Type': 'application/json',
                 "Authorization": `Bearer ${config.TOKEN}`
             },
