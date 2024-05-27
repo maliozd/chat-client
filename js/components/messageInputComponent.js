@@ -1,7 +1,7 @@
 
 import { EVENTS } from '../constants.js';
 import { sendChatMessage } from '../services/messageService.js';
-import { config } from '../config.js';
+import { config } from '../../config.js';
 import { getChattingUserId,getMyId } from '../services/valueHelper.js';
 
 export class MessageInputComponent {

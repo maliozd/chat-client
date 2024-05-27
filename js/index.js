@@ -1,12 +1,13 @@
 import { connection, startConnection } from './signalr.js';
 import { fetchUsers } from './services/userService.js';
 import { fetchMessages, sendChatMessage } from './services/messageService.js';
-import { GetToken, config } from './config.js';
+import { config } from '../config.js';
 import { SidePanelComponent } from './components/sidePanelComponent.js'
 import { MessagesComponent } from './components/messagesComponent.js'
 import { MessageInputComponent } from './components/messageInputComponent.js'
 import { EVENTS } from './constants.js';
 import { getChattingUserId,getMyId,setChattingUserId } from './services/valueHelper.js';
+import { getLsToken } from './services/valueHelper.js';
 
 let deviceWidth;
 let deviceHeight;

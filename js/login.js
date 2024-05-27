@@ -1,4 +1,4 @@
-import { config } from './config.js'
+import { config } from '../config.js'
 import { EVENTS } from './constants.js';
 
 const loginBtn = document.getElementById('loginBtn');
@@ -34,12 +34,19 @@ async function submitForm() {
             body: JSON.stringify(loginReq)
         });
 
-        var token = await response.text();
+        var res = await response.json();
+        console.log(res);
+        if(res.statusCode == 500)
+            {
+                alert(res.message);
+            }
+            else if (res.statusCode == 200){
 
-        const customEvent = new CustomEvent(EVENTS.LOGIN_SUCCESS, {
-            detail: { token: token }
-        });
-        document.getElementById('userLoginForm').dispatchEvent(customEvent);
+                const customEvent = new CustomEvent(EVENTS.LOGIN_SUCCESS, {
+                    detail: { token: res.token }
+                });
+                document.getElementById('userLoginForm').dispatchEvent(customEvent);
+            }
 
     } catch (error) {
         console.error(error);

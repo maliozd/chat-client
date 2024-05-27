@@ -1,8 +1,10 @@
-import { GetToken, config } from './config.js';
+import { config } from '../config.js';
 import { RECEIVE_FUNCTION_NAMES } from './constants.js';
+import { getLsToken } from './services/valueHelper.js';
+
 export const connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:8080/hubs/messagehub", {
-        accessTokenFactory: async () => GetToken(),
+        accessTokenFactory: async () => getLsToken(),
         withCredentials: true,
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,

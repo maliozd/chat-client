@@ -1,4 +1,3 @@
-import { GetToken } from "../config.js";
 
 export function getChattingUserId() {
     return parseInt(document.getElementById('txtChatInput').getAttribute('selectedUserID'))
@@ -11,7 +10,7 @@ export function setChattingUserId(userId) {
 export function getMyId() {
 
     /*    // console.log(token);
-        // var token = GetToken();
+        // var token = getLsToken();
         // var base64Url = token.split('.')[1];
         // var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         // var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
@@ -20,9 +19,14 @@ export function getMyId() {
             
             // var payload = JSON.parse(jsonPayload);
             */
-     var token = GetToken();
+     var token = getLsToken();
     var payload = JSON.parse(atob(token.split('.')[1]));
     var id = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
     console.log("my id : ", id);
     return id;
+}
+
+export function getLsToken(){
+        return localStorage.getItem('access-token');  
+     
 }
