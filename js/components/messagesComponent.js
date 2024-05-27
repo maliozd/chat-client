@@ -1,26 +1,30 @@
+import { getCurrentUserId } from "../services/valueHelper.js";
+
 export class MessagesComponent {
-    constructor(container, messages,activeUserId) {
+    constructor(container, messages) {
         this.container = container
         this.data = messages;
-        this.activeUserId =  activeUserId;
+        this.activeUserId = getCurrentUserId();
     }
-   
+
     render() {
         const messagesHtml = `
-            ${this.data.map(message => 
-                `<li class="message" style="align-self: ${this.activeUserId == message.fromId ? 'flex-end' : 'flex-start'}">
+            ${this.data.map(message =>
+            `<li class="message" style="align-self: ${this.activeUserId == message.fromUserId ? 'flex-end' : 'flex-start'}">
                     ${message.messageText}
                 </li>`
-            ).join('')}
+        ).join('')}
             `;
 
         this.container.innerHTML = '';
         this.container.innerHTML += messagesHtml;
-        this.scrollToBottom();
+
+        // requestAnimationFrame(() => this.scrollToBottom())
+        setTimeout(() => this.scrollToBottom(), 0);
     }
 
     scrollToBottom() {
-        this.container.scrollTop = this.container.scrollHeight;
+        this.container.scrollToBottom = this.container.scrollHeight;
     }
 }
 

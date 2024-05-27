@@ -6,7 +6,7 @@ import { SidePanelComponent } from './components/sidePanelComponent.js'
 import { MessagesComponent } from './components/messagesComponent.js'
 import { MessageInputComponent } from './components/messageInputComponent.js'
 import { EVENTS } from './constants.js';
-import { getChattingUserId,getMyId,setChattingUserId } from './services/valueHelper.js';
+import { getChattingUserId, getCurrentUserId, setChattingUserId } from './services/valueHelper.js';
 import { getLsToken } from './services/valueHelper.js';
 
 let deviceWidth;
@@ -33,26 +33,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 document.getElementById('userLoginForm').addEventListener(EVENTS.LOGIN_SUCCESS, async (event) => {
     var token = event.detail.token;
-    // console.log(token);
     document.querySelector('.popup').classList.remove('active');
     localStorage.setItem("access-token", token);
-    await loadLayout();
     await startConnection();
-    getData();
+    await loadLayout();
+    var data = getData();
 })
 async function getData() {
 
-    const userResponse = await fetchUsers();
-    const messagesResponse = await fetchMessages();
+    const users = await fetchUsers();
+    const userMessages = await fetchMessages();
 
-    const mappedUserMessageData = userResponse.map(user => {
-        const latestMessage = messagesResponse
-            .filter(message => message.fromId === user.id)
+    console.log(users)
+    console.log(userMessages)
+
+    const mappedUserMessageData = users.map(user => {
+        const latestMessage = userMessages.messages
+            .filter(message => message.fromUserId === user.id)
             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
         return { ...user, latestMessage };
     });
 
-    // console.log(messagesResponse);
+    console.log(mappedUserMessageData);
     // console.log(mappedUserMessageData);
     // var latestMessage = messagesResponse
     //     .filter(message => message.fromId === config.USER_ID)
@@ -65,7 +67,7 @@ async function getData() {
 
     renderSidePanel(mappedUserMessageData);
 
-   
+
     // var latestMessage = messagesResponse.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0]
 
     localStorage.setItem('messages', JSON.stringify(mappedUserMessageData));
@@ -92,10 +94,10 @@ function renderSidePanel(sidePanelData) {
     const sidePanel = new SidePanelComponent(
         sidePanelDiv,
         sidePanelData,
-        getMyId()
+        getCurrentUserId()
     );
     sidePanel.render();
-    sidePanelDiv.addEventListener(EVENTS.USER_SELECTED, (event) => {
+    sidePanelDiv.addEventListener(EVENTS.USER_CHAT_SELECTED, (event) => {
         // console.log(event)
         const userId = event.detail.userId;
         // console.log('Selected user ID:', userId);

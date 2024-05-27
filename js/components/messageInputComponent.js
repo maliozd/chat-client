@@ -2,7 +2,7 @@
 import { EVENTS } from '../constants.js';
 import { sendChatMessage } from '../services/messageService.js';
 import { config } from '../../config.js';
-import { getChattingUserId,getMyId } from '../services/valueHelper.js';
+import { getChattingUserId,getCurrentUserId } from '../services/valueHelper.js';
 
 export class MessageInputComponent {
     constructor(container) {
@@ -20,15 +20,15 @@ export class MessageInputComponent {
 
     addEventListener() {
         const inputField = this.container.querySelector('#txtChatInput');
-        var chattingUserId = getChattingUserId();
 
-        var myId = getMyId();
+        var myId = getCurrentUserId();
         inputField.addEventListener('keypress',async (event) => {
+            console.log(getChattingUserId());
             if (event.key === 'Enter') {
                 const message1 = {
                     messageText: inputField.value,
                     fromUserId: myId,
-                    toUserId: chattingUserId,
+                    toUserId: getChattingUserId(),
                 };
                 await sendChatMessage(message1);
                 const lsMessages = JSON.parse(localStorage.getItem('messages'));

@@ -1,6 +1,6 @@
 // constants.js
 export const EVENTS = {
-    USER_SELECTED: 'userSelected',
+    USER_CHAT_SELECTED: 'userSelected',
     MESSAGE_SENDED: 'messageSended',
     LOGIN_SUCCESS: 'loginSuccess',
 };
@@ -11,6 +11,11 @@ export const RECEIVE_FUNCTION_NAMES = {
 export const INVOKE_FUNCTION_NAMES = {
     // MESSAGE_RECEIVED : "MessageReceived",
     // USER_CONNECTED: 'userConnected'
+}
+
+export const API_URLS = {
+    LOGIN : "Auth/Login",
+    
 }
 function parseTimestamp(timestamp) {
     const [datePart, timePart] = timestamp.split(' ');

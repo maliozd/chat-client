@@ -15,7 +15,8 @@ export async function fetchUsers() {
             },
         });
 
-        return response.json();
+        var responseBody =  await response.json();
+        return responseBody.data;
     } catch (error) {
         console.error(error);
     }

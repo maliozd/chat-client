@@ -14,7 +14,8 @@ export async function fetchMessages() {
                 "Authorization": `Bearer ${getLsToken()}`
             },
         });
-        return response.json();
+        var responseBody = await response.json();
+        return responseBody.data;
     } catch (error) {
         console.error(error)
     }

@@ -73,12 +73,10 @@ export class SidePanelComponent {
 
     addEventListeners() {
         const userElements = this.container.querySelectorAll('.user');
-        // console.log(this.container)
-        // console.log(userElements)
         userElements.forEach(element => {
             element.addEventListener('click', (e) => {
                 const userId = element.dataset.userId;
-                const customEvent = new CustomEvent(EVENTS.USER_SELECTED, { detail: { userId } });
+                const customEvent = new CustomEvent(EVENTS.USER_CHAT_SELECTED, { detail: { userId } });
                 this.container.dispatchEvent(customEvent);
             })
         })

@@ -1,5 +1,5 @@
 import { config } from '../config.js'
-import { EVENTS } from './constants.js';
+import { EVENTS,API_URLS } from './constants.js';
 
 const loginBtn = document.getElementById('loginBtn');
 // console.log(loginBtn)
@@ -23,7 +23,7 @@ async function submitForm() {
         password: password
     };
     try {
-        var response = await fetch(`${config.API_BASE_URL}/Auth/Login`, {
+        var response = await fetch(`${config.API_BASE_URL}/${API_URLS.LOGIN}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,9 +41,9 @@ async function submitForm() {
                 alert(res.message);
             }
             else if (res.statusCode == 200){
-
+       
                 const customEvent = new CustomEvent(EVENTS.LOGIN_SUCCESS, {
-                    detail: { token: res.token }
+                    detail: { token: res.data.token }
                 });
                 document.getElementById('userLoginForm').dispatchEvent(customEvent);
             }
