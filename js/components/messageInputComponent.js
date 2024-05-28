@@ -29,22 +29,20 @@ export class MessageInputComponent {
                     messageText: inputField.value,
                     fromUserId: myId,
                     toUserId: getChattingUserId(),
+                    timestamp : new Date().getTime() 
                 };
                 await sendChatMessage(message1);
-                const lsMessages = JSON.parse(localStorage.getItem('messages'));
-                lsMessages.push({
-                    messageText: message1.message,
-                    fromName: message1.fromName,
-                    fromId: message1.fromId,
-                    timestamp: new Date().getTime(),
-                });
-                inputField.value = '';
+                // const lsMessages = JSON.parse(localStorage.getItem('messages'));
+                // lsMessages.push({
+                //     messageText: message1.message,
+                //     fromName: message1.fromName,
+                //     fromId: message1.fromId,
+                //     timestamp: new Date().getTime(),
+                // });
+                // inputField.value = '';
                 const customEvent = new CustomEvent(EVENTS.MESSAGE_SENDED);
                 this.container.dispatchEvent(customEvent);
-
             }
-
-
         });
     }
 }

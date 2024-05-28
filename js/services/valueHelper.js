@@ -20,13 +20,19 @@ export function getCurrentUserId() {
             
             var payload = JSON.parse(jsonPayload);
             */
-     var token = getLsToken();
+    var token = getLsToken();
     var payload = JSON.parse(atob(token.split('.')[1]));
     var id = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
     return id;
 }
 
-export function getLsToken(){
-        return localStorage.getItem('access-token');  
-     
+export function getLsToken() {
+    return localStorage.getItem('access-token');
+}
+
+function parseTimestamp(timestamp) {
+    const [datePart, timePart] = timestamp.split(' ');
+    const [day, month, year] = datePart.split('.').map(Number);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+    return new Date(year, month - 1, day, hours, minutes, seconds);
 }

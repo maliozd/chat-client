@@ -1,7 +1,6 @@
 import { config } from '../config.js';
 import { RECEIVE_FUNCTION_NAMES } from './constants.js';
 import { getLsToken } from './services/valueHelper.js';
-
 export const connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:8080/hubs/messagehub", {
         accessTokenFactory: async () => getLsToken(),
@@ -41,3 +40,7 @@ export const messageReceived = connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECE
     localStorage.setItem('messages', JSON.stringify(messages));
     render();
 });
+
+export function invoke(invokeFunctionName, args) {
+    connection.invoke(invokeFunctionName, args);
+}
