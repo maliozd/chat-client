@@ -2,14 +2,14 @@ import { config } from '../config.js';
 import { RECEIVE_FUNCTION_NAMES } from './constants.js';
 import { getLsToken } from './services/valueHelper.js';
 export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:8080/hubs/messagehub", {
+    .withUrl(config.messageHubUrl, {
         accessTokenFactory: async () => getLsToken(),
         withCredentials: true,
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
         headers: {
-            "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
-            // 'ngrok-skip-browser-warning': 69420,
+            "Access-Control-Allow-Origin": "http://127.0.0.1:8080",
+            'ngrok-skip-browser-warning': 69420,
             "credentials": 'include',
             "crossorigin": true
         }

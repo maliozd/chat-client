@@ -3,10 +3,10 @@ import { getChattingUserId } from '../services/valueHelper.js';
 //container : element that will be rendering inside of
 //data : component data
 export class SidePanelComponent {
-    constructor(container, sidepanelData,currentUserId) {
+    constructor(container, sidepanelData, currentUserId) {
         this.container = container;
         this.data = sidepanelData;
-        this.currentUserId =currentUserId;
+        this.currentUserId = currentUserId;
         this.addEventListeners();
     }
     render(data) {
@@ -57,7 +57,7 @@ export class SidePanelComponent {
                 <div class="userProfile__picture">
                 <div class="wrapper">
                     <img src="https://static.vecteezy.com/system/resources/previews/021/548/095/non_2x/default-profile-picture-avatar-user-avatar-icon-person-icon-head-icon-profile-picture-icons-default-anonymous-user-male-and-female-businessman-photo-placeholder-social-network-avatar-portrait-free-vector.jpg"
-                        alt="${postUser.username}">
+                        alt="">
                 </div>
                 <!-- idle,offline,online,busy -->
                 <span class="statusIndicator offline"></span>
