@@ -26,10 +26,10 @@ export class MessageInputComponent {
             console.log(getChattingUserId());
             if (event.key === 'Enter') {
                 const message1 = {
-                    messageText: inputField.value,
-                    fromUserId: myId,
-                    toUserId: getChattingUserId(),
-                    timestamp : new Date().getTime() 
+                    Message: inputField.value,
+                    FromId: parseInt(myId),
+                    ToUserId: parseInt(getChattingUserId()),
+                    Timestamp : new Date() 
                 };
                 await sendChatMessage(message1);
                 // const lsMessages = JSON.parse(localStorage.getItem('messages'));
