@@ -42,5 +42,6 @@ export const messageReceived = connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECE
 });
 
 export function invoke(invokeFunctionName, args) {
+    console.log(invokeFunctionName)
     connection.invoke(invokeFunctionName, args);
 }

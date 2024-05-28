@@ -38,6 +38,7 @@ export async function sendChatMessage(message) {
     //     referrerPolicy: 'no-referrer',
     //     body: JSON.stringify(message)
     // });
+    console.log(message);
     invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
 
 }
