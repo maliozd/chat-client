@@ -1,8 +1,10 @@
+import  activeUserInstance  from '../states/activeUserStateManager.js';
+import { EVENTS } from '../constants.js'
 class SidePanelComponent extends HTMLElement {
-    constructor() {
-        super();
-        const template = document.createElement('template');
-        template.innerHTML = `
+  constructor(lastChattingUserId) { //bunu sonradan yapacağım
+    super();
+    const template = document.createElement('template');
+    template.innerHTML = `
         <style>
         :host {
           display: flex;
@@ -44,7 +46,7 @@ class SidePanelComponent extends HTMLElement {
         }
 
         .user-list li:hover {
-          background-color: #eee;
+          background-color: #38bce848;
         }
 
         .user-list img {
@@ -57,6 +59,16 @@ class SidePanelComponent extends HTMLElement {
         .user-list span {
           font-size: 16px;
         }
+        .user-list .active {
+          background-color: #20bcf0a0;
+          transition: 0.6s;
+
+        }
+        .user-list .active:hover {
+          background-color: #20bcf0a0;
+          // 38bce848
+          // 20bcf0a0
+        }
       </style>
 
       <div class="search-bar">
@@ -68,44 +80,35 @@ class SidePanelComponent extends HTMLElement {
         </ul>
     
         `;
-        this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true));
-        this._data = [];
-        this._currentUserId = null;
-    }
+    this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true));
+    this._data = [];
+    this._activeChattingUserId = activeUserInstance.activeUserId;
+  }
 
-    connectedCallback() {
-        this.render();
-    }
+  connectedCallback() {
+    this.render();
+    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, this.handleActiveUserChange.bind(this));
+  }
+  disconnectedCallBack() {
+    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, this.handleActiveUserChange.bind(this));
 
-    set data(value) {
-        if (JSON.stringify(this._data) !== JSON.stringify(value)) {
-            this._data = value;
-            this.render();
-        }
-    }
+  }
+  set data(value) {
+      this._data = value;
+      this.render();
+  }
 
-    get data() {
-        return this._data;
-    }
+  get data() {
+    return this._data;
+  }
 
-    set currentUserId(value) {
-        if (this._currentUserId !== value) {
-            this._currentUserId = value;
-            this.render();
-        }
-    }
 
-    get currentUserId() {
-        return this._currentUserId;
-    }
-
-    render() {
-        if (!this.shadowRoot) return;
-        const usersContainer = this.shadowRoot.querySelector('.user-list');
-        console.log(usersContainer)
-        console.log(this._data);
-        usersContainer.innerHTML = this._data.map(user => `
-            <li class="user" data-user-id="${user.id}">
+  render() {
+    if (!this.shadowRoot) return;
+    // console.log("active user id from render func : ", this._activeChattingUserId);
+    const usersContainer = this.shadowRoot.querySelector('.user-list');
+    usersContainer.innerHTML = this._data.map(user => `
+            <li class="${this._activeChattingUserId == user.id ? "user active" : "user"}" data-user-id="${user.id}">
                 <div class="user__picture">
                     <img src="https://static.vecteezy.com/system/resources/previews/021/548/095/non_2x/default-profile-picture-avatar-user-avatar-icon-person-icon-head-icon-profile-picture-icons-default-anonymous-user-male-and-female-businessman-photo-placeholder-social-network-avatar-portrait-free-vector.jpg" alt="${user.username}">
                 </div>
@@ -114,31 +117,28 @@ class SidePanelComponent extends HTMLElement {
             </li>
         `).join('');
 
-        const postUser = this._data.find(user => user.id === this._currentUserId);
-        const profilePic = this.shadowRoot.querySelector('.profile-pic');
-        if (postUser) {
-            profilePic.src = "https://static.vecteezy.com/system/resources/previews/021/548/095/non_2x/default-profile-picture-avatar-user-avatar-icon-person-icon-head-icon-profile-picture-icons-default-anonymous-user-male-and-female-businessman-photo-placeholder-social-network-avatar-portrait-free-vector.jpg";
-        }
-        this.addEventListeners();
-    }
 
-    addEventListeners() {
-        const userElements = this.shadowRoot.querySelectorAll('.user');
-        userElements.forEach(element => {
-            element.addEventListener('click', (e) => {
-                const userId = element.dataset.userId;
-                const customEvent = new CustomEvent('USER_CHAT_SELECTED', { detail: { userId } });
-                this.dispatchEvent(customEvent);
-            });
-        });
-    }
+    this.addEventListeners();
+  }
 
-    loadExternalCSS(url) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = url;
-        this.shadowRoot.appendChild(link);
-    }
+  addEventListeners() {
+    const userElements = this.shadowRoot.querySelectorAll('.user');
+    userElements.forEach(element => {
+      element.addEventListener('click', (e) => {
+        const userId = element.dataset.userId;
+        activeUserInstance.activeUserId = userId;
+      });
+    });
+  }
+
+
+  handleActiveUserChange(event) {
+    const { activeUserId } = event.detail;
+    this._activeChattingUserId = activeUserId;
+    this.render();
+  }
+
+
 }
 
 customElements.define('side-panel-component', SidePanelComponent);

@@ -1,3 +1,114 @@
+:root {
+  --deviceWidth: 1920px;
+  --deviceHeight: 1080px;
+}
+
+/* General Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background-color: #82e4ff;
+  color: #212121;
+  overflow: hidden;
+}
+
+#chat-app {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+#chat-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+
+messages-component {
+  flex: 1;
+  overflow-y: auto;
+}
+
+message-input-component {
+  padding: 10px;
+  background-color: #f4f4f4;
+}
+
+.messages__input {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #0a85aa;
+  border-top: 1px solid #ccc;
+}
+
+.messages__input input[type="text"] {
+  flex-grow: 1;
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.messages__input button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.messages__input button:hover {
+  background-color: #0056b3;
+}
+
+
+.messages {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 20px;
+}
+
+.messages__input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.messages__input input {
+  flex: 1;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.messages__input button {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.messages__input button:hover {
+  background-color: #0056b3;
+}
+
+/* Popup Styles */
 .popup {
   position: fixed;
   top: 0;
@@ -9,15 +120,17 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   -webkit-backdrop-filter: blur(50px);
-          backdrop-filter: blur(50px);
+  backdrop-filter: blur(50px);
   transition: 0.4s;
   opacity: 0;
   pointer-events: none;
 }
+
 .popup.active {
   opacity: 1;
   pointer-events: all;
 }
+
 .popup .userLogin {
   display: flex;
   flex-direction: column;
@@ -26,23 +139,28 @@
   padding: 20px;
   border-radius: 10px;
 }
+
 .popup .userLogin > div {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .popup .userLogin > div label {
   font-size: 15px;
 }
+
 .popup .userLogin > div input {
   padding: 5px 10px;
   border-radius: 999px;
   border-color: rgba(0, 0, 0, 0.2);
   transition: 0.45s;
 }
+
 .popup .userLogin > div input:focus {
   border-color: black;
 }
+
 .popup .userLogin button {
   padding: 10px 20px;
   border-radius: 999px;
@@ -51,44 +169,12 @@
   transition: 0.45s;
   cursor: pointers;
 }
+
 .popup .userLogin button:hover {
   background-color: lightblue;
 }
 
-:root {
-  --deviceWidth: 1920px;
-  --deviceHeight: 1080px;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-ul {
-  list-style: none;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  background-color: #82e4ff;
-  color: #212121;
-  overflow: hidden;
-}
-
-#canvas {
-  display: grid;
-  width: var(--deviceWidth);
-  height: var(--deviceHeight);
-  grid-template-columns: 400px 1fr;
-}
-
+/* Side Panel Styles */
 .sidePanel {
   display: flex;
   flex-direction: column;
@@ -100,12 +186,14 @@ body {
   background-color: #ffa617;
   border-radius: 10px;
 }
+
 .sidePanel #sidePanel__head {
   display: flex;
   flex-direction: column;
   gap: 20px;
   font-weight: bold;
 }
+
 .sidePanel #sidePanel__head button {
   display: flex;
   align-items: center;
@@ -116,25 +204,30 @@ body {
   width: 30px;
   height: 30px;
 }
+
 .sidePanel #sidePanel__head button svg path {
   fill: rgba(33, 33, 33, 0.5);
 }
+
 .sidePanel #sidePanel__head .headUtility {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .sidePanel #sidePanel__head .utility {
   display: flex;
   justify-content: center;
   align-items: stretch;
   gap: 20px;
 }
+
 .sidePanel #sidePanel__head .utility .buttons {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
 .sidePanel #sidePanel__head .utility .buttons button {
   width: 100%;
   padding: 20px 0;
@@ -143,35 +236,44 @@ body {
   transition: 0.45s;
   cursor: pointer;
 }
+
 .sidePanel #sidePanel__head .utility .buttons button.active {
   background-color: #ca7c00;
 }
+
 .sidePanel #sidePanel__head .utility .buttons button:hover {
   background-color: #fd9c00;
 }
+
 .sidePanel #sidePanel__head .utility .buttons button:first-of-type {
   border-left: 0;
 }
+
 .sidePanel #sidePanel__head .utility .buttons button svg {
   width: 25px;
 }
+
 .sidePanel #sidePanel__head input {
   width: 100%;
   padding: 10px;
 }
+
 .sidePanel #sidePanel__interface {
   height: 100%;
   overflow: auto;
   padding-top: 10px;
 }
+
 .sidePanel #sidePanel__interface::-webkit-scrollbar {
   background-color: transparent;
 }
+
 .sidePanel #sidePanel__interface .users {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .sidePanel #sidePanel__interface .users .user {
   display: grid;
   align-items: center;
@@ -183,24 +285,29 @@ body {
   background-color: rgba(82, 212, 255, 0.5);
   transition: 0.45s;
 }
+
 .sidePanel #sidePanel__interface .users .user.active {
   background-color: rgba(82, 212, 255, 0);
 }
+
 .sidePanel #sidePanel__interface .users .user:hover {
   background-color: rgba(82, 212, 255, 0.25);
 }
+
 .sidePanel #sidePanel__interface .users .user__picture {
   width: 50px;
   height: 50px;
   border: 1px solid #52d4ff;
   border-radius: 999px;
 }
+
 .sidePanel #sidePanel__interface .users .user__picture img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   margin-right: 10px;
 }
+
 .sidePanel #sidePanel__interface .users .user__name {
   font-weight: bold;
   white-space: nowrap;
@@ -208,69 +315,17 @@ body {
   text-overflow: ellipsis;
   color: #212121;
 }
+
 .sidePanel #sidePanel__interface .users .user__latestMessage {
   -moz-column-span: 2;
-       column-span: 2;
+  column-span: 2;
   height: 20px;
   color: #616161;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.mainPanel {
-  display: grid;
-  grid-template-rows: 100px 1fr;
-  height: 100%;
-  width: 100%;
-  padding: 0 10px;
-}
-
-.messages {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.messages .messages__list {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 5px;
-  gap: 5px;
-  height: calc(var(--deviceHeight) - 170px);
-  overflow: auto;
-}
-.messages .messages__list::-webkit-scrollbar {
-  background-color: #ffa617;
-}
-.messages .messages__list::-webkit-scrollbar-thumb {
-  border-radius: 99999px;
-  background-color: #52d4ff;
-}
-.messages .messages__list .message {
-  padding: 7px 12px;
-  width: -moz-max-content;
-  width: max-content;
-  background-color: #393939;
-  color: #fff;
-  border: 1px solid #00d5ff;
-  border-radius: 99999px;
-}
-.messages .messages__input {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-}
-.messages .messages__input #txtChatInput {
-  width: 100%;
-  height: 50px;
-  background-color: #28fd88;
-  border-radius: 100px;
-  border: 0;
-}
-
+/* User Profile Styles */
 .userProfile {
   display: flex;
   justify-content: flex-start;
@@ -281,6 +336,7 @@ body {
   height: max-content;
   background-color: #ffcd7d;
 }
+
 .userProfile__nameAndStatus {
   display: flex;
   flex-direction: column;
@@ -288,28 +344,34 @@ body {
   align-items: flex-start;
   justify-content: center;
 }
+
 .userProfile__nameAndStatus .user {
   font-size: 18px;
   color: #212121;
 }
+
 .userProfile__nameAndStatus .status {
   font-size: 12px;
   color: rgba(33, 33, 33, 0.5);
 }
+
 .userProfile__picture {
   position: relative;
   overflow: visible;
 }
+
 .userProfile__picture .wrapper {
   width: 40px;
   height: 40px;
   border-radius: 999px;
   overflow: hidden;
 }
+
 .userProfile__picture .wrapper img {
   width: 100%;
   height: 100%;
 }
+
 .userProfile__picture .statusIndicator {
   position: absolute;
   z-index: 99;
@@ -320,24 +382,34 @@ body {
   height: 10px;
   border-radius: 999px;
 }
+
 .userProfile__picture .statusIndicator.online {
   background-color: green;
 }
+
 .userProfile__picture .statusIndicator.offline {
   background-color: gray;
 }
+
 .userProfile__picture .statusIndicator.idle {
   background-color: yellow;
 }
+
 .userProfile__picture .statusIndicator.busy {
   background-color: red;
 }
+
 .userProfile__settings {
   background-color: transparent;
   border: none;
   margin-left: auto;
 }
+
 .userProfile__settings svg {
   width: 20px;
   height: 20px;
-}/*# sourceMappingURL=style.css.map */
+}
+ .user-list .active {
+  background-color: #20bcf0a0;
+ transition: 0.6s;
+ }

@@ -1,5 +1,5 @@
 export const EVENTS = {
-    USER_CHAT_SELECTED: 'userSelected',
+    ACTIVE_USER_CHAT_CHANGED: 'userSelected',
     MESSAGE_SENDED: 'messageSended',
     LOGIN_SUCCESS: 'loginSuccess',
 };

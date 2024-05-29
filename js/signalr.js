@@ -1,6 +1,6 @@
 import { config } from '../config.js';
 import { RECEIVE_FUNCTION_NAMES } from './constants.js';
-import { getChattingUserId, getLsToken } from './services/valueHelper.js';
+import {  getLsToken } from './services/valueHelper.js';
 export const connection = new signalR.HubConnectionBuilder()
     .withUrl(config.messageHubUrl, {
         accessTokenFactory:  () => getLsToken(),

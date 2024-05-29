@@ -1,13 +1,6 @@
 
-export function getChattingUserId() {
-    return parseInt(document.getElementById('txtChatInput').getAttribute('selectedUserID'))
-}
 
-export function setChattingUserId(userId) {
-    document.getElementById('txtChatInput').setAttribute('selectedUserID', userId);
-}
-
-export function getCurrentUserId() {
+export function getCurrentUserInfo() {
 
     /*    // console.log(token);
 
@@ -23,7 +16,12 @@ export function getCurrentUserId() {
     var token = getLsToken();
     var payload = JSON.parse(atob(token.split('.')[1]));
     var id = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-    return id;
+    var username = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+
+    return {
+        id: id,
+        username: username
+    }
 }
 
 export function getLsToken() {

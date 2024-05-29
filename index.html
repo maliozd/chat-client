@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="modulepreload" href="/js/components/messagesComponent.js">
     <link rel="modulepreload" href="/js/components/chattingUserComponent.js">
     <link rel="modulepreload" href="/js/components/messageInputComponent.js">
-    <link rel="modulepreload" href="/js/components/messagesComponent.js">
     <link rel="modulepreload" href="/js/components/sidePanelComponent.js">
 </head>
 
@@ -18,11 +18,8 @@
 
         <div id="chat-main">
             <chatting-user-component></chatting-user-component>
-            <messages-component></messages-component>
-            <div id="chat-input">
-                <input type="text" placeholder="Mesaj Yaz">
-                <button>Gönder</button>
-            </div>
+            <message-list-component></message-list-component>
+            <message-input-component></message-input-component>
         </div>
     </div>
     <!-- <div id="canvas">

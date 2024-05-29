@@ -1,5 +1,5 @@
 export const config = {
-    API_BASE_URL: "https://6953-85-99-183-161.ngrok-free.app/api",
-    BASE_URL: "https://6953-85-99-183-161.ngrok-free.app/",
-    messageHubUrl: "https://6953-85-99-183-161.ngrok-free.app/hubs/messagehub",
+    API_BASE_URL: "http://localhost:8080/api",
+    BASE_URL: "http://localhost:8080",
+    messageHubUrl: "http://localhost:8080/hubs/messagehub",
 };
