@@ -2,19 +2,19 @@ import { config } from '../config.js';
 import { RECEIVE_FUNCTION_NAMES } from './constants.js';
 import { getChattingUserId, getLsToken } from './services/valueHelper.js';
 export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:8080/hubs/messagehub", {
-        accessTokenFactory: async () => getLsToken(),
+    .withUrl(config.messageHubUrl, {
+        accessTokenFactory:  () => getLsToken(),
         withCredentials: true,
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
         headers: {
             "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
-            // 'ngrok-skip-browser-warning': 69420,
+            'ngrok-skip-browser-warning': 69420,
             "credentials": 'include',
             "crossorigin": true
         }
     })
-    .withAutomaticReconnect(10)
+    .withAutomaticReconnect(1000,2000,3000)
     .build();
 
 export async function startConnection() {

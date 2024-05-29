@@ -45,7 +45,8 @@ async function initializeData() {
         saveDataToLocalStorage(mappedUserMessageData, users);
 
         messagesComponent = document.querySelector('messages-component');
-        messagesComponent.messages = messages.messages;
+        console.log(messagesComponent);
+        messagesComponent.data = messages.messages;
 
         setupMessageInputComponent();
         setupMessageListener();
@@ -84,9 +85,9 @@ function renderSidePanel(data) {
 
 
 function setupMessageInputComponent() {
-    const wrapper = document.querySelector('.messages');
+    // const wrapper = document.querySelector('.messages');
     const messageInputComponent = document.createElement('message-input-component');
-    wrapper.appendChild(messageInputComponent);
+    // wrapper.appendChild(messageInputComponent);
     messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
         messagesComponent.addNewMessage(event.detail);
     });
@@ -127,15 +128,15 @@ function loadCSS() {
   
    
   
-    var head = document.getElementsByTagName('head')[0] 
+    // var head = document.getElementsByTagName('head')[0] 
       
-    // Creating link element 
-    var style = document.createElement('link')  
-    style.href = 'css/style.css'
-    style.type = 'text/css'
-    style.rel = 'stylesheet'
-    head.append(style); 
-    host.shadowRoot.appendChild( style )
+    // // Creating link element 
+    // var style = document.createElement('link')  
+    // style.href = 'css/style.css'
+    // style.type = 'text/css'
+    // style.rel = 'stylesheet'
+    // head.append(style); 
+    // host.shadowRoot.appendChild( style )
     // Adding the name of the file to keep record 
     // filesAdded += ' styles.css' 
 }

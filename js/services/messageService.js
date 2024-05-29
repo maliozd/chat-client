@@ -10,7 +10,7 @@ export async function fetchMessages() {
             cache: 'no-cache',
             credentials: 'same-origin',
             headers: {
-                // 'ngrok-skip-browser-warning':69420,
+                'ngrok-skip-browser-warning':69420,
                 'Content-Type': 'application/json',
                 "Authorization": `Bearer ${getLsToken()}`
             },
@@ -23,21 +23,7 @@ export async function fetchMessages() {
 }
 
 export async function sendChatMessage(message) {
-    // await fetch(`${config.API_BASE_URL}/Message/`, {
-    //     method: 'POST',
-    //     mode: 'cors',
-    //     cache: 'no-cache',
-    //     credentials: 'same-origin',
-    //     headers: {
-    //         // 'ngrok-skip-browser-warning':69420,
-    //         'Content-Type': 'application/json',
-    //         "Authorization": `Bearer ${getLsToken()}`
-
-    //     },
-    //     redirect: 'follow',
-    //     referrerPolicy: 'no-referrer',
-    //     body: JSON.stringify(message)
-    // });
+  
     connection.invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
   
 }

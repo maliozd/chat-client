@@ -102,6 +102,8 @@ class SidePanelComponent extends HTMLElement {
     render() {
         if (!this.shadowRoot) return;
         const usersContainer = this.shadowRoot.querySelector('.user-list');
+        console.log(usersContainer)
+        console.log(this._data);
         usersContainer.innerHTML = this._data.map(user => `
             <li class="user" data-user-id="${user.id}">
                 <div class="user__picture">
