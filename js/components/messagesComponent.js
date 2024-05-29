@@ -1,30 +1,77 @@
-import { getCurrentUserId } from "../services/valueHelper.js";
+class MessagesComponent extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML =`
+        <style>
+          :host {
+            flex: 1;
+            overflow-y: scroll;
+            padding: 20px;
+          }
+  
+          .message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+          }
+  
+          .message.self {
+            flex-direction: row-reverse;
+          }
+  
+          .message p {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            max-width: 80%;
+            margin: 0 5px;
+          }
+  
+          .message.self p {
+            background-color: #ddd;
+          }
+  
+          .message img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+          }
+        </style>
+  
+        <div class="messages"></div>
+      `;
+    }
 
-export class MessagesComponent {
-    constructor(container, messages) {
-        this.container = container
-        this.data = messages;
-        this.activeUserId = getCurrentUserId();
+    set messages(messages) {
+        this._messages = messages;
+        this.render();
+    }
+
+    get messages() {
+        return this._messages;
     }
 
     render() {
-        const messagesHtml = `
-            ${this.data.map(message =>
-            `<li class="message" style="align-self: ${this.activeUserId == message.fromUserId ? 'flex-end' : 'flex-start'}">
-                    ${message.messageText}
-                </li>`
-        ).join('')}
-            `;
+        const messagesList = this.shadowRoot.querySelector('.messages');
+        messagesList.innerHTML = this._messages.map(message =>
+            `<li class="message ${message.fromUserId === getCurrentUserId() ? 'self' : 'other'}">
+                ${message.messageText}
+            </li>`
+        ).join('');
+        this.scrollToBottom();
+    }
 
-        this.container.innerHTML = '';
-        this.container.innerHTML += messagesHtml;
-
-        // requestAnimationFrame(() => this.scrollToBottom())
-        setTimeout(() => this.scrollToBottom(), 0);
+    addNewMessage(messageData) {
+        this._messages.push(messageData);
+        this.render();
     }
 
     scrollToBottom() {
-        this.container.scrollToBottom = this.container.scrollHeight;
+        const messagesList = this.shadowRoot.querySelector('.messages__list');
+        messagesList.scrollTop = messagesList.scrollHeight;
     }
 }
 
+customElements.define('messages-component', MessagesComponent);

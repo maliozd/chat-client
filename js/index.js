@@ -1,34 +1,26 @@
 import { connection, startConnection } from './signalr.js';
 import { fetchUsers } from './services/userService.js';
-import { fetchMessages, sendChatMessage } from './services/messageService.js';
-import { config } from '../config.js';
-import { SidePanelComponent } from './components/sidePanelComponent.js';
-import { MessagesComponent } from './components/messagesComponent.js';
-import { MessageInputComponent } from './components/messageInputComponent.js';
-import { EVENTS } from './constants.js';
-import { getChattingUserId, getCurrentUserId, setChattingUserId } from './services/valueHelper.js';
-import { getLsToken } from './services/valueHelper.js';
+import { fetchMessages } from './services/messageService.js';
+import { EVENTS, RECEIVE_FUNCTION_NAMES } from './constants.js';
+import { getCurrentUserId, getChattingUserId, setChattingUserId } from './services/valueHelper.js';
+import './components/messageInputComponent.js'; // MessageInputComponent import edildi
+import './components/sidePanelComponent.js';
 
-let deviceWidth;
-let deviceHeight;
-
-function initialize() {
-    console.log(config.API_BASE_URL)
-    clearLocalStorage();
-    calculateDeviceSize(window.innerWidth, window.innerHeight);
-    window.addEventListener('resize', () => calculateDeviceSize(window.innerWidth, window.innerHeight));
-    document.addEventListener('DOMContentLoaded', async () => {
+let messagesComponent;
+async function initialize() {
+    // if (!document.querySelector('#canvas').innerHTML.trim()) {
         clearLocalStorage();
         calculateDeviceSize(window.innerWidth, window.innerHeight);
-    });
-    setupLoginFormListener();
+        window.addEventListener('resize', () => calculateDeviceSize(window.innerWidth, window.innerHeight));
+        document.addEventListener('DOMContentLoaded', async () => {
+            calculateDeviceSize(window.innerWidth, window.innerHeight);
+        });
+        setupLoginFormListener();
+    // }
 }
-
 function calculateDeviceSize(width, height) {
-    deviceWidth = width;
-    deviceHeight = height;
-    document.body.style.setProperty('--deviceWidth', `${deviceWidth}px`);
-    document.body.style.setProperty('--deviceHeight', `${deviceHeight}px`);
+    document.body.style.setProperty('--deviceWidth', `${width}px`);
+    document.body.style.setProperty('--deviceHeight', `${height}px`);
 }
 
 function setupLoginFormListener() {
@@ -37,8 +29,9 @@ function setupLoginFormListener() {
         document.querySelector('.popup').classList.remove('active');
         localStorage.setItem("access-token", token);
         await startConnection();
-        await loadLayout();
+        // await loadLayout();
         await initializeData();
+        loadCSS();
     });
 }
 
@@ -47,12 +40,15 @@ async function initializeData() {
         const users = await fetchUsers();
         const messages = await fetchMessages();
         const mappedUserMessageData = mapUserMessages(users, messages.messages);
-
+        console.log(mappedUserMessageData);
         renderSidePanel(mappedUserMessageData);
         saveDataToLocalStorage(mappedUserMessageData, users);
-        renderMessagesComponent(messages.messages);
-        setupMessageInputComponent();
 
+        messagesComponent = document.querySelector('messages-component');
+        messagesComponent.messages = messages.messages;
+
+        setupMessageInputComponent();
+        setupMessageListener();
     } catch (error) {
         console.error('Error initializing data:', error);
     }
@@ -61,36 +57,47 @@ async function initializeData() {
 function mapUserMessages(users, messages) {
     return users.map(user => {
         const latestMessage = messages
-            .filter(message => message.fromUserId === user.id || message.toUserId == user.id)
+            .filter(message => message.fromUserId === user.id || message.toUserId === user.id)
             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
         return { ...user, latestMessage };
     });
 }
 
-function renderSidePanel(data) {
+function initializeSidePanelComponent() {
     const sidePanelDiv = document.getElementById('sidePanelDiv');
-    const sidePanel = new SidePanelComponent(sidePanelDiv, data, getCurrentUserId());
-    sidePanel.render();
-    sidePanelDiv.addEventListener(EVENTS.USER_CHAT_SELECTED, (event) => {
-        const userId = event.detail.userId;
-        setChattingUserId(userId);
-    });
+    if (!sidePanelDiv.querySelector('side-panel-component')) {
+        const sidePanel = document.createElement('side-panel-component');
+        sidePanelDiv.appendChild(sidePanel);
+    }
 }
 
-function renderMessagesComponent(messages) {
-    const messagesDiv = document.querySelector('.messages__list');
-    const messagesComponent = new MessagesComponent(messagesDiv, messages);
-    messagesComponent.render();
+function renderSidePanel(data) {
+    const sidePanel = document.querySelector('side-panel-component');
+    if (sidePanel) {
+        sidePanel.data = data;
+        sidePanel.addEventListener(EVENTS.USER_CHAT_SELECTED, (event) => {
+            const userId = event.detail.userId;
+            setChattingUserId(userId);
+        });
+    }
 }
+
 
 function setupMessageInputComponent() {
     const wrapper = document.querySelector('.messages');
-    const messageInputComponent = new MessageInputComponent(wrapper);
-    messageInputComponent.render();
-    wrapper.addEventListener(EVENTS.MESSAGE_SENDED, () => {
-        // console.log(JSON.parse(localStorage.getItem('messages')));
-        //TODO
+    const messageInputComponent = document.createElement('message-input-component');
+    wrapper.appendChild(messageInputComponent);
+    messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
+        messagesComponent.addNewMessage(event.detail);
     });
+}
+
+function setupMessageListener() {
+        connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (messageData) => {
+            if (messageData.fromUserId === getChattingUserId() || messageData.toUserId === getChattingUserId()) {
+                messagesComponent.addNewMessage(messageData);
+            }
+        });
 }
 
 function saveDataToLocalStorage(messagesData, usersData) {
@@ -105,13 +112,32 @@ function clearLocalStorage() {
 }
 
 async function loadLayout() {
-    try {
-        const responseLayout = await fetch('/layouts/layout.html');
-        const layout = await responseLayout.text();
-        document.getElementById('canvas').innerHTML = layout;
-    } catch (error) {
-        console.error('Error loading layout:', error);
+    if (!document.getElementById('canvas').innerHTML.trim()) {
+        try {
+            const responseLayout = await fetch('/layouts/layout.html');
+            const layout = await responseLayout.text();
+            document.getElementById('canvas').innerHTML = layout;
+            initializeSidePanelComponent();
+        } catch (error) {
+            console.error('Error loading layout:', error);
+        }
     }
+}
+function loadCSS() {  
+  
+   
+  
+    var head = document.getElementsByTagName('head')[0] 
+      
+    // Creating link element 
+    var style = document.createElement('link')  
+    style.href = 'css/style.css'
+    style.type = 'text/css'
+    style.rel = 'stylesheet'
+    head.append(style); 
+    host.shadowRoot.appendChild( style )
+    // Adding the name of the file to keep record 
+    // filesAdded += ' styles.css' 
 }
 
 initialize();

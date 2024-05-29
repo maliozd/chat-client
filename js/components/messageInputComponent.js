@@ -1,48 +1,42 @@
-
-import { EVENTS } from '../constants.js';
-import { sendChatMessage } from '../services/messageService.js';
-import { config } from '../../config.js';
-import { getChattingUserId,getCurrentUserId } from '../services/valueHelper.js';
-
-export class MessageInputComponent {
-    constructor(container) {
-        this.container = container;
-    }
-    render() {
-        const html = `
-        <div class="messages__input" id="messageInputContainer">
-            <input type="text" id="txtChatInput" selectedUserID="0">
-        </div> 
+class MessageInputComponent extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = `
+            <style>
+                .messages__input {
+                    display: flex;
+                }
+                #txtChatInput {
+                    flex: 1;
+                    padding: 10px;
+                    margin: 5px;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                }
+            </style>
+            <div class="messages__input" id="messageInputContainer">
+                <input type="text" id="txtChatInput" placeholder="Type a message...">
+            </div>
         `;
-        this.container.innerHTML += html;
-        this.addEventListener();
     }
 
-    addEventListener() {
-        const inputField = this.container.querySelector('#txtChatInput');
-
-        var myId = getCurrentUserId();
-        inputField.addEventListener('keypress',async (event) => {
-            console.log(getChattingUserId());
+    connectedCallback() {
+        const inputField = this.shadowRoot.querySelector('#txtChatInput');
+        inputField.addEventListener('keypress', async (event) => {
             if (event.key === 'Enter') {
-                const message1 = {
-                    Message: inputField.value,
-                    FromId: parseInt(myId),
-                    ToUserId: parseInt(getChattingUserId()),
-                    Timestamp : new Date() 
+                const message = {
+                    messageText: inputField.value,
+                    fromUserId: getCurrentUserId(),
+                    toUserId: getChattingUserId(),
+                    timestamp: new Date()
                 };
-                await sendChatMessage(message1);
-                // const lsMessages = JSON.parse(localStorage.getItem('messages'));
-                // lsMessages.push({
-                //     messageText: message1.message,
-                //     fromName: message1.fromName,
-                //     fromId: message1.fromId,
-                //     timestamp: new Date().getTime(),
-                // });
-                // inputField.value = '';
-                const customEvent = new CustomEvent(EVENTS.MESSAGE_SENDED);
-                this.container.dispatchEvent(customEvent);
+                await sendChatMessage(message);
+                inputField.value = '';
+                this.dispatchEvent(new CustomEvent(EVENTS.MESSAGE_SENDED, { detail: message }));
             }
         });
     }
 }
+
+customElements.define('message-input-component', MessageInputComponent);

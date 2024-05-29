@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <link rel="stylesheet" href="css/style.css">
-    
+    <link rel="modulepreload" href="/js/components/chattingUserComponent.js">
+    <link rel="modulepreload" href="/js/components/messageInputComponent.js">
+    <link rel="modulepreload" href="/js/components/messagesComponent.js">
+    <link rel="modulepreload" href="/js/components/sidePanelComponent.js">
 </head>
+
 <body>
-    <div id="canvas">
+
+    <side-panel-component></side-panel-component>
+    <chatting-user-component></chatting-user-component>
+    <message-input></message-input>
+    <messages-component></messages-component>
+    <div id="chat-app">
+        <side-panel-component></side-panel-component>
+
+        <div id="chat-main">
+            <chatting-user-component></chatting-user-component>
+            <chat-messages-component></chat-messages-component>
+
+            <div id="chat-input">
+                <input type="text" placeholder="Mesaj Yaz">
+                <button>Gönder</button>
+            </div>
+        </div>
     </div>
+    <!-- <div id="canvas">
+    </div> -->
     <div class="popup active">
         <form class="userLogin" id="userLoginForm" action="#">
             <div class="userLogin__userName">
@@ -18,14 +41,16 @@
             </div>
             <div class="userLogin__password">
                 <label for="password" required>Şifre</label>
-                <input type="password" name="password" id="password" required>        
+                <input type="password" name="password" id="password" required>
             </div>
             <button class="userLogin__submit" id="loginBtn" type="button">Giriş</button>
         </form>
     </div>
-    
+
     <script src="./node_modules/@microsoft/signalr/dist/browser/signalr.js" type="module"></script>
     <script src="js/index.js" type="module"></script>
     <script src="js/login.js" type="module"></script>
 
-</body></html>
+</body>
+
+</html>

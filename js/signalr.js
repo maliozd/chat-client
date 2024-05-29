@@ -1,6 +1,6 @@
 import { config } from '../config.js';
 import { RECEIVE_FUNCTION_NAMES } from './constants.js';
-import { getLsToken } from './services/valueHelper.js';
+import { getChattingUserId, getLsToken } from './services/valueHelper.js';
 export const connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:8080/hubs/messagehub", {
         accessTokenFactory: async () => getLsToken(),
@@ -30,18 +30,22 @@ connection.onclose(async () => {
     // await startConnection();
 });
 
-export const messageReceived = connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
-    const messages = JSON.parse(localStorage.getItem('messages'));
-    messages.push({
-        messageText: message.message,
-        fromName: message.from,
-        timestamp: new Date().getTime(),
-    });
-    localStorage.setItem('messages', JSON.stringify(messages));
-    render();
-});
 
-export function invoke(invokeFunctionName, args) {
-    console.log(invokeFunctionName)
-    connection.invoke(invokeFunctionName, args);
-}
+// connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
+//     console.log(message);
+//     var event = new CustomEvent(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, {
+//         detail: message
+//     });
+//     window.dispatchEvent(event);
+// });
+
+// export const messageReceived = connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
+//     const messages = JSON.parse(localStorage.getItem('messages'));
+//     messages.push({
+//         messageText: message.message,
+//         fromName: message.from,
+//         timestamp: new Date().getTime(),
+//     });
+//     localStorage.setItem('messages', JSON.stringify(messages));
+// });
+

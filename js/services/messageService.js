@@ -1,6 +1,6 @@
 import { config } from '../../config.js';
 import { getLsToken } from './valueHelper.js';
-import { invoke } from '../signalr.js'
+import { connection } from '../signalr.js'
 import { INVOKE_FUNCTION_NAMES, RECEIVE_FUNCTION_NAMES } from '../constants.js';
 export async function fetchMessages() {
     try {
@@ -38,7 +38,6 @@ export async function sendChatMessage(message) {
     //     referrerPolicy: 'no-referrer',
     //     body: JSON.stringify(message)
     // });
-    console.log(message);
-    invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
-
+    connection.invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
+  
 }
