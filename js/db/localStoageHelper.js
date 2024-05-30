@@ -23,7 +23,6 @@ export class LocalStorageHelper {
         try {
             localStorage.setItem('user_messages', JSON.stringify(usersWithMessages));
             localStorage.setItem('sidePanel_Data', JSON.stringify(usersWithLastMessages));
-            console.log("success")
         } catch (error) {
             console.error("Error saving data to localStorage:", error);
         }

@@ -1,12 +1,14 @@
-import activeUserInstance from './activeUserStateManager.js';
+import activeUserInstance from '../states/activeUserStateManager.js';
 import { EVENTS } from '../constants.js';
 import { getUserMessagesById } from '../services/messageService.js';
-
+import { getCurrentUserInfo } from '../services/valueHelper.js';
 class MessagesComponent extends HTMLElement {
   constructor() {
     super();
-    const template = document.createElement('template');
-    template.innerHTML = `
+    this.attachShadow({ mode: 'open' });
+    console.log("messages comp ctor")
+
+    this.shadowRoot.innerHTML = `
 <style>
 :host {
     flex: 1;
@@ -50,8 +52,8 @@ class MessagesComponent extends HTMLElement {
   
   <div class="messages"></div>
   `;
-    this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true));
     this._data = [];
+    this._userId = getCurrentUserInfo().id;
   }
 
   set data(value) {
@@ -66,18 +68,21 @@ class MessagesComponent extends HTMLElement {
   }
   
   connectedCallback() {
-    // this.render(); şimdilik kapalı kalsın
-    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, this.handleActiveUserChange.bind(this));
+    this.render(); 
+    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, (e) => {
+      console.log(e);
+    });
+    console.log("selamun aleyküm")
   }
 
   disconnectedCallback() {
-    window.removeEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, this.handleActiveUserChange.bind(this));
+    window.removeEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, handleActiveUserChange);
   }
 
   async handleActiveUserChange(event) {
+    console.log(event);
     const { activeUserId } = event.detail;
     const messages = await getUserMessagesById(activeUserId); // Asenkron olarak kullanıcı mesajlarını alıyoruz
-    console.log("messages", messages)
     this.data = messages;
   }
 
@@ -85,7 +90,7 @@ class MessagesComponent extends HTMLElement {
     console.log("rendering messages");
     const messagesList = this.shadowRoot.querySelector('.messages');
     messagesList.innerHTML = this._data.map(message =>
-      `<div class="message ${message.fromUserId === getCurrentUserId() ? 'self' : 'other'}">
+      `<div class="message ${message.fromUserId === this._userId ? 'self' : 'other'}">
         <img src="https://via.placeholder.com/40" alt="User Image">
         <p>${message.messageText}</p>
       </div>`
@@ -104,4 +109,4 @@ class MessagesComponent extends HTMLElement {
   }
 }
 
-customElements.define('messages-component', MessagesComponent);
+customElements.define('message-list-component', MessagesComponent);

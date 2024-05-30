@@ -1,35 +1,40 @@
 class ChattingUserComponent extends HTMLElement {
   constructor() {
     super();
-    const template = document.createElement('template');
-    template.innerHTML = `
-    <style>
-      :host {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-      }
+    try {
 
-      img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 10px;
-      }
+      this.attachShadow({ mode: 'open' });
 
-      span {
-        font-size: 16px;
-        font-weight: bold;
-      }
-    </style>
+      this.shadowRoot.innerHTML = `
+      <style>
+        :host {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          border-bottom: 1px solid #ddd;
+        }
+  
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          margin-right: 10px;
+        }
+  
+        span {
+          font-size: 16px;
+          font-weight: bold;
+        }
+      </style>
+  
+      <img src="https://picsum.photos/200" alt="Kullanıcı Profil Resmi">
+      <span class="user_name">Kullanıcı Adı</span>
+    `;
+      this._data = [];
+    } catch (error) {
+      console.error(error);
 
-    <img src="https://picsum.photos/200" alt="Kullanıcı Profil Resmi">
-    <span class="user_name">Kullanıcı Adı</span>
-  `;
-    this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode());
-    this._data = [];
-
+    }
   }
 
 
@@ -46,14 +51,20 @@ class ChattingUserComponent extends HTMLElement {
 
 
   connectedCallback() {
+    console.log('selamun aleyküm')
     this.render();
   }
+  disconnectedCallback() {
+    console.log("chatting user component diconnected from dom ");
 
-
+  }
+  attributeChangedCallback() {
+    console.log("selamun aleyküm")
+  }
   render() {
     const messagesList = this.shadowRoot.querySelector('#chat-main');
     this.shadowRoot.querySelector('.user_name').innerHTML = 'Mehmet Ali';
-    
+
   }
 
 }

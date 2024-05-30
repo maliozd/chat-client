@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="modulepreload" href="/js/components/messagesComponent.js">
+    <!-- <link rel="modulepreload" href="/js/components/messagesComponent.js">
     <link rel="modulepreload" href="/js/components/chattingUserComponent.js">
     <link rel="modulepreload" href="/js/components/messageInputComponent.js">
     <link rel="modulepreload" href="/js/components/sidePanelComponent.js">
+    <link rel="modulepreload" href="./js/login.js"> -->
 </head>
 
 <body>
@@ -17,7 +18,7 @@
         <side-panel-component></side-panel-component>
 
         <div id="chat-main">
-            <chatting-user-component></chatting-user-component>
+            <chatting-user-component ></chatting-user-component>
             <message-list-component></message-list-component>
             <message-input-component></message-input-component>
         </div>
@@ -41,7 +42,11 @@
     <script src="./node_modules/@microsoft/signalr/dist/browser/signalr.js" type="module"></script>
     <script src="js/index.js" type="module"></script>
     <script src="js/login.js" type="module"></script>
-
+    <link rel="stylesheet" href="css/style.css">
+    <script src="/js/components/messagesComponent.js" type="module"></script>
+    <script src="/js/components/chattingUserComponent.js" type="module"></script>
+    <script src="/js/components/messageInputComponent.js" type="module"></script>
+    <script src="/js/components/sidePanelComponent.js" type="module"></script>
 </body>
 
 </html>

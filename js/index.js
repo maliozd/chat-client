@@ -1,4 +1,4 @@
-import { connection, startConnection } from './signalr.js';
+import { signalRConnection, startConnection } from './signalr.js';
 import { fetchUsers } from './services/userService.js';
 import { fetchMessages, mapUserLatestMessages, mapUserMessages } from './services/messageService.js';
 import { EVENTS, RECEIVE_FUNCTION_NAMES } from './constants.js';
@@ -12,7 +12,6 @@ import activeUserStateManager from './states/activeUserStateManager.js';
 const ls = new LocalStorageHelper();
 
 async function initialize() {
-    // if (!document.querySelector('#canvas').innerHTML.trim()) {
     clearLocalStorage();
     calculateDeviceSize(window.innerWidth, window.innerHeight);
     window.addEventListener('resize', () => calculateDeviceSize(window.innerWidth, window.innerHeight));
@@ -20,7 +19,6 @@ async function initialize() {
         calculateDeviceSize(window.innerWidth, window.innerHeight);
     });
     setupLoginFormListener();
-    // }
 }
 function calculateDeviceSize(width, height) {
     document.body.style.setProperty('--deviceWidth', `${width}px`);
@@ -48,10 +46,10 @@ async function initializeData() {
         //user & messages
         const mappedUserMessagesData = mapUserMessages(usersResponse, messagesResponse.messages);
 
+        ls.saveDataToLocalStorage(mappedUserLatestMessageData, mappedUserMessagesData);
 
         renderSidePanel(mappedUserLatestMessageData);
         renderActiveChattingUserComponent();
-        ls.saveDataToLocalStorage(mappedUserLatestMessageData, mappedUserMessagesData);
 
         console.log(mappedUserMessagesData);
         renderMessagesComponent(mappedUserMessagesData)
@@ -67,12 +65,12 @@ function renderSidePanel(mappedUserLatestMessageData) {
     const sidePanel = document.querySelector('side-panel-component');
     if (sidePanel) {
         sidePanel.data = mappedUserLatestMessageData;
-
     }
 }
 
 function renderActiveChattingUserComponent() {
     const activeChattingUserComponent = document.querySelector('chatting-user-component');
+    console.log(activeChattingUserComponent);
     if (activeChattingUserComponent) {
         var user = getCurrentUserInfo();
         activeChattingUserComponent.data = {
@@ -86,13 +84,16 @@ function renderMessagesComponent(mappedUserMessagesData) {
     if (mappedUserMessagesData) {
         //şimdilik statik bir değer verdim
         var userId = activeUserStateManager.activeUserId;
-        console.log(userId);
+        // console.log(userId);
         
         //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
         filteredMessages = mappedUserMessagesData.flatMap(userMessages => {
             return userMessages.filter(message => message.fromUserId == userId || message.toUserId == userId);
         });
-        console.log("renderMessagesForUser, messages : ", filteredMessages);
+        // console.log("filtered messages : ", filteredMessages);
+
+        var filteredMessagesFilteredMessages = filteredMessages.filter(message => message.fromUserId == userId || message.toUserId == userId);
+        console.log(filteredMessagesFilteredMessages);
     }
     const messagesComponent = document.querySelector('message-list-component');
     console.log(messagesComponent);
@@ -109,7 +110,7 @@ function setupMessageInputComponent() {
 }
 
 function setupMessageListener() {
-    connection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (messageData) => {
+    signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (messageData) => {
         if (messageData.fromUserId === getChattingUserId() || messageData.toUserId === getChattingUserId()) {
             const messagesComponent = document.querySelector('messages-component');
             messagesComponent.addNewMessage(messageData);

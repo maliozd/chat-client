@@ -127,6 +127,7 @@ class SidePanelComponent extends HTMLElement {
       element.addEventListener('click', (e) => {
         const userId = element.dataset.userId;
         activeUserInstance.activeUserId = userId;
+        console.log(activeUserInstance);
       });
     });
   }

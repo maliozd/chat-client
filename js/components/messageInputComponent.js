@@ -1,3 +1,6 @@
+import {getCurrentUserInfo} from '../services/valueHelper.js'
+import { signalRConnection } from '../signalr.js';
+
 class MessageInputComponent extends HTMLElement {
     constructor() {
         super();
@@ -46,7 +49,7 @@ class MessageInputComponent extends HTMLElement {
             if (event.key === 'Enter') {
                 const message = {
                     messageText: inputField.value,
-                    fromUserId: getCurrentUserId(),
+                    fromUserId: getCurrentUserInfo(),
                     toUserId: this._chattingUserId,
                     timestamp: new Date()
                 };
@@ -55,6 +58,7 @@ class MessageInputComponent extends HTMLElement {
                 this.dispatchEvent(new CustomEvent(EVENTS.MESSAGE_SENDED, { detail: message }));
             }
         });
+        console.log('selamun aleyküm')
     }
 
     setChattingUserId(userId) {
