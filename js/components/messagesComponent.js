@@ -69,16 +69,16 @@ class MessagesComponent extends HTMLElement {
   
   connectedCallback() {
     this.render(); 
-    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, (e) => {
-      console.log(e);
-    });
+    // window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, (e) => {
+    //   console.log(e);
+    // });
     console.log("selamun aleyküm")
   }
 
   disconnectedCallback() {
-    window.removeEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, handleActiveUserChange);
+    console.log('disconnected');
   }
-
+  
   async handleActiveUserChange(event) {
     console.log(event);
     const { activeUserId } = event.detail;
@@ -96,6 +96,10 @@ class MessagesComponent extends HTMLElement {
       </div>`
     ).join('');
     this.scrollToBottom();
+    window.removeEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, handleActiveUserChange);
+    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, (e) => {
+      console.log(e);
+    });
   }
 
   addNewMessage(messageData) {

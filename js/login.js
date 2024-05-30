@@ -1,5 +1,5 @@
 import { config } from '../config.js'
-import { EVENTS,API_URLS } from './constants.js';
+import { EVENTS, API_URLS } from './constants.js';
 
 const loginBtn = document.getElementById('loginBtn');
 // console.log(loginBtn)
@@ -36,17 +36,16 @@ async function submitForm() {
 
         var res = await response.json();
         console.log(res);
-        if(res.statusCode == 500)
-            {
-                alert(res.message);
-            }
-            else if (res.statusCode == 200){
-       
-                const customEvent = new CustomEvent(EVENTS.LOGIN_SUCCESS, {
-                    detail: { token: res.data.token }
-                });
-                document.getElementById('userLoginForm').dispatchEvent(customEvent);
-            }
+        if (res.statusCode == 500) {
+            alert(res.message);
+        }
+        else if (res.statusCode == 200) {
+
+            const customEvent = new CustomEvent(EVENTS.LOGIN_SUCCESS, {
+                detail: { token: res.data.token }
+            });
+            document.getElementById('userLoginForm').dispatchEvent(customEvent);
+        }
 
     } catch (error) {
         console.error(error);

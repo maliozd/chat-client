@@ -36,7 +36,7 @@ class ActiveUserStateManager {
         activeUserId: this._data.activeUserId,
       },
     });
-    // console.log(window)
+    console.log(window)
     window.dispatchEvent(event);
   }
 }

@@ -117,7 +117,6 @@ class SidePanelComponent extends HTMLElement {
             </li>
         `).join('');
 
-
     this.addEventListeners();
   }
 
@@ -131,7 +130,6 @@ class SidePanelComponent extends HTMLElement {
       });
     });
   }
-
 
   handleActiveUserChange(event) {
     const { activeUserId } = event.detail;
