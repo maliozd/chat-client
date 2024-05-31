@@ -15,7 +15,7 @@ const ls = new LocalStorageHelper();
 const messagesComponent = document.querySelector('message-list-component');
 const activeChattingUserComponent = document.querySelector('chatting-user-component');
 const messageInputComponent = document.querySelector("message-input-component")
-const sidePanel = document.querySelector('side-panel-component');
+const sidePanelComponent = document.querySelector('side-panel-component');
 
 
 async function initialize() {
@@ -55,7 +55,7 @@ async function initializeData() {
         
         ls.saveDataToLocalStorage(mappedUserLatestMessageData, mappedUserMessagesData);
 
-        sidePanel.data = mappedUserLatestMessageData;
+        sidePanelComponent.data = mappedUserLatestMessageData;
         messagesComponent.data = mappedUserMessagesData.messages;
 
         var user = getCurrentUserInfo();
