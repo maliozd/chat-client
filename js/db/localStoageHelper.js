@@ -12,7 +12,10 @@ export class LocalStorageHelper {
     getUserMessagesFromStorage(userId) {
         try {
             const userMessages = JSON.parse(localStorage.getItem('user_messages')) || {};
-            return userMessages[userId] || [];
+            console.log("sdofkjsdlfsd",userMessages);
+            console.log("sdofkjsdlfsd",userId);
+            return userMessages.filter(element => element.userId == userId)[0];
+
         } catch (error) {
             console.error(`Error getting messages for user ${userId} from storage:`, error);
             return [];

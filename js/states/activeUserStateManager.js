@@ -35,12 +35,14 @@ class ActiveUserStateManager {
       detail: {
         activeUserId: this._data.activeUserId,
       },
+      bubbles: true,
+      cancelable: false,
+      composed: true,
     });
-    console.log(window)
-    window.dispatchEvent(event);
+    console.log(window);
+    document.getElementById('chat-app').dispatchEvent(event);
   }
 }
-
 const activeUserInstance = new ActiveUserStateManager();
 Object.freeze(activeUserInstance); //make immutable 
 

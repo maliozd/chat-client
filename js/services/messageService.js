@@ -36,16 +36,18 @@ export function mapUserLatestMessages(users, messages) {
     });
 }
 export function mapUserMessages(users, messages) {
+    // console.log(messages);
     return users.map(user => {
         const userMessages = messages
             .filter(message => message.fromUserId == user.id || message.toUserId == user.id)
             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-        return userMessages;
+        return {userId : user.id, messages : [...userMessages]};
     });
 }
 
 export function getUserMessagesById(userId) {
     var ls = new LocalStorageHelper();
     var userMessages = ls.getUserMessagesFromStorage(userId);
+    console.log(userMessages);
     return userMessages;
 }

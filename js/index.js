@@ -1,5 +1,6 @@
 import { signalRConnection, startConnection } from './signalr.js';
 import { fetchUsers } from './services/userService.js';
+import { getUserMessagesById } from './services/messageService.js';
 import { fetchMessages, mapUserLatestMessages, mapUserMessages } from './services/messageService.js';
 import { EVENTS, RECEIVE_FUNCTION_NAMES } from './constants.js';
 import { getCurrentUserInfo } from './services/valueHelper.js';
@@ -10,6 +11,12 @@ import { LocalStorageHelper } from './db/localStoageHelper.js';
 import activeUserStateManager from './states/activeUserStateManager.js';
 
 const ls = new LocalStorageHelper();
+
+const messagesComponent = document.querySelector('message-list-component');
+const activeChattingUserComponent = document.querySelector('chatting-user-component');
+const messageInputComponent = document.querySelector("message-input-component")
+const sidePanel = document.querySelector('side-panel-component');
+
 
 async function initialize() {
     clearLocalStorage();
@@ -40,80 +47,54 @@ async function initializeData() {
         const usersResponse = await fetchUsers();
         const messagesResponse = await fetchMessages();
         //şimdilik initial statik bir değer verdim
-        activeUserStateManager.activeUserId = 7;
         //user & latest message
+        console.log(messagesResponse);
         const mappedUserLatestMessageData = mapUserLatestMessages(usersResponse, messagesResponse.messages);
-        //user & messages
         const mappedUserMessagesData = mapUserMessages(usersResponse, messagesResponse.messages);
 
         ls.saveDataToLocalStorage(mappedUserLatestMessageData, mappedUserMessagesData);
 
-        renderSidePanel(mappedUserLatestMessageData);
-        renderActiveChattingUserComponent();
-
-        console.log(mappedUserMessagesData);
-        renderMessagesComponent(mappedUserMessagesData)
-        setupMessageInputComponent();
-        setupMessageListener();
-    } catch (error) {
-        console.error('Error initializing data:', error);
-    }
-}
-
-
-function renderSidePanel(mappedUserLatestMessageData) {
-    const sidePanel = document.querySelector('side-panel-component');
-    if (sidePanel) {
         sidePanel.data = mappedUserLatestMessageData;
-    }
-}
+        messagesComponent.data = mappedUserMessagesData.messages;
 
-function renderActiveChattingUserComponent() {
-    const activeChattingUserComponent = document.querySelector('chatting-user-component');
-    console.log(activeChattingUserComponent);
-    if (activeChattingUserComponent) {
         var user = getCurrentUserInfo();
         activeChattingUserComponent.data = {
             username: user.id,
             id: user.id
         }
-    }
-}
-function renderMessagesComponent(mappedUserMessagesData) {
-    let filteredMessages = mappedUserMessagesData;
-    if (mappedUserMessagesData) {
-        //şimdilik statik bir değer verdim
-        var userId = activeUserStateManager.activeUserId;
-        // console.log(userId);
-        
-        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
-        filteredMessages = mappedUserMessagesData.flatMap(userMessages => {
-            return userMessages.filter(message => message.fromUserId == userId || message.toUserId == userId);
-        });
-        // console.log("filtered messages : ", filteredMessages);
 
-        var filteredMessagesFilteredMessages = filteredMessages.filter(message => message.fromUserId == userId || message.toUserId == userId);
-        console.log(filteredMessagesFilteredMessages);
+        // console.log(mappedUserMessagesData);
+        // setupMessageInputComponent();
+        // setupMessageListener();
+    } catch (error) {
+        console.error('Error initializing data:', error);
     }
-    const messagesComponent = document.querySelector('message-list-component');
-    console.log(messagesComponent);
-    messagesComponent.data = filteredMessages;
 }
-function setupMessageInputComponent() {
-    // const wrapper = document.querySelector('.messages');
-    const messagesComponent = document.querySelector('messages-component');
-    const messageInputComponent = document.createElement('message-input-component');
-    // wrapper.appendChild(messageInputComponent);
-    messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
-        messagesComponent.addNewMessage(event.detail);
-    });
-}
+
+document.querySelector('side-panel-component').addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, async (event) => {
+    const { activeUserId } = event.detail;
+    console.log(activeUserId);
+    var userMessageData = getUserMessagesById(parseInt(activeUserId));
+    messagesComponent.data= userMessageData.messages;
+})
+
+
+messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
+    messagesComponent.addNewMessage(event.detail);
+});
+
+//IDEA 
+//i can create a base class and initiliza signalR connection on that. 
+//and extend my components from base class that i created
+//connection and signal events can dispatching from that base component
+//connection can be managable on my components ? 
+//and my child components can listen that base component's events. 
 
 function setupMessageListener() {
     signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (messageData) => {
         if (messageData.fromUserId === getChattingUserId() || messageData.toUserId === getChattingUserId()) {
             const messagesComponent = document.querySelector('messages-component');
-            messagesComponent.addNewMessage(messageData);
+            messagesComponent.data =messageData;
         }
     });
 }

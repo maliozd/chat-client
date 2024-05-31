@@ -1,10 +1,11 @@
-import  activeUserInstance  from '../states/activeUserStateManager.js';
+import activeUserInstance from '../states/activeUserStateManager.js';
 import { EVENTS } from '../constants.js'
 class SidePanelComponent extends HTMLElement {
   constructor(lastChattingUserId) { //bunu sonradan yapacağım
     super();
-    const template = document.createElement('template');
-    template.innerHTML = `
+    this.attachShadow({ mode: 'open' })
+    console.log("selamun aleyküm");
+    this.shadowRoot.innerHTML = `
         <style>
         :host {
           display: flex;
@@ -80,22 +81,19 @@ class SidePanelComponent extends HTMLElement {
         </ul>
     
         `;
-    this.attachShadow({ mode: 'open' }).appendChild(template.content.cloneNode(true));
     this._data = [];
     this._activeChattingUserId = activeUserInstance.activeUserId;
   }
 
   connectedCallback() {
     this.render();
-    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, this.handleActiveUserChange.bind(this));
   }
   disconnectedCallBack() {
-    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, this.handleActiveUserChange.bind(this));
 
   }
   set data(value) {
-      this._data = value;
-      this.render();
+    this._data = value;
+    this.render();
   }
 
   get data() {
@@ -125,18 +123,19 @@ class SidePanelComponent extends HTMLElement {
     userElements.forEach(element => {
       element.addEventListener('click', (e) => {
         const userId = element.dataset.userId;
-        activeUserInstance.activeUserId = userId;
-        console.log(activeUserInstance);
+        this._activeChattingUserId = userId;
+        let event = new CustomEvent(EVENTS.ACTIVE_USER_CHAT_CHANGED, {
+          detail: {
+            activeUserId: this._activeChattingUserId,
+          },
+          bubbles: true,
+          cancelable: false,
+          composed: true,
+        });
+        this.dispatchEvent(event);
       });
     });
   }
-
-  handleActiveUserChange(event) {
-    const { activeUserId } = event.detail;
-    this._activeChattingUserId = activeUserId;
-    this.render();
-  }
-
 
 }
 

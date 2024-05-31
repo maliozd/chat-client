@@ -1,4 +1,4 @@
-import {getCurrentUserInfo} from '../services/valueHelper.js'
+import { getCurrentUserInfo } from '../services/valueHelper.js'
 import { signalRConnection } from '../signalr.js';
 
 class MessageInputComponent extends HTMLElement {
@@ -55,7 +55,12 @@ class MessageInputComponent extends HTMLElement {
                 };
                 await sendChatMessage(message);
                 inputField.value = '';
-                this.dispatchEvent(new CustomEvent(EVENTS.MESSAGE_SENDED, { detail: message }));
+                this.dispatchEvent(new CustomEvent(EVENTS.MESSAGE_SENDED, {
+                    detail: message,
+                    composed: true,
+                    bubbles: true,
+                    cancelable: false
+                }));
             }
         });
         console.log('selamun aleyküm')

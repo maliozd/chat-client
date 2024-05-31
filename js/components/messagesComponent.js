@@ -6,7 +6,7 @@ class MessagesComponent extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    console.log("messages comp ctor")
+    console.log("selamun aleyküm")
 
     this.shadowRoot.innerHTML = `
 <style>
@@ -57,8 +57,6 @@ class MessagesComponent extends HTMLElement {
   }
 
   set data(value) {
-    console.log("messages component value : ", value);
-    
     this._data = value;
     this.render();
   }
@@ -69,9 +67,6 @@ class MessagesComponent extends HTMLElement {
   
   connectedCallback() {
     this.render(); 
-    // window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, (e) => {
-    //   console.log(e);
-    // });
     console.log("selamun aleyküm")
   }
 
@@ -79,15 +74,9 @@ class MessagesComponent extends HTMLElement {
     console.log('disconnected');
   }
   
-  async handleActiveUserChange(event) {
-    console.log(event);
-    const { activeUserId } = event.detail;
-    const messages = await getUserMessagesById(activeUserId); // Asenkron olarak kullanıcı mesajlarını alıyoruz
-    this.data = messages;
-  }
 
   render() {
-    console.log("rendering messages");
+    console.log("rendering messages...");
     const messagesList = this.shadowRoot.querySelector('.messages');
     messagesList.innerHTML = this._data.map(message =>
       `<div class="message ${message.fromUserId === this._userId ? 'self' : 'other'}">
@@ -96,10 +85,7 @@ class MessagesComponent extends HTMLElement {
       </div>`
     ).join('');
     this.scrollToBottom();
-    window.removeEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, handleActiveUserChange);
-    window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, (e) => {
-      console.log(e);
-    });
+
   }
 
   addNewMessage(messageData) {
