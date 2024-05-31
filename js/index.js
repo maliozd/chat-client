@@ -48,10 +48,11 @@ async function initializeData() {
         const messagesResponse = await fetchMessages();
         //şimdilik initial statik bir değer verdim
         //user & latest message
-        console.log(messagesResponse);
         const mappedUserLatestMessageData = mapUserLatestMessages(usersResponse, messagesResponse.messages);
         const mappedUserMessagesData = mapUserMessages(usersResponse, messagesResponse.messages);
 
+        console.log("sa", mappedUserMessagesData.find((data,index) => data.userId == 7));
+        
         ls.saveDataToLocalStorage(mappedUserLatestMessageData, mappedUserMessagesData);
 
         sidePanel.data = mappedUserLatestMessageData;
@@ -63,9 +64,6 @@ async function initializeData() {
             id: user.id
         }
 
-        // console.log(mappedUserMessagesData);
-        // setupMessageInputComponent();
-        // setupMessageListener();
     } catch (error) {
         console.error('Error initializing data:', error);
     }
@@ -75,7 +73,7 @@ document.querySelector('side-panel-component').addEventListener(EVENTS.ACTIVE_US
     const { activeUserId } = event.detail;
     console.log(activeUserId);
     var userMessageData = getUserMessagesById(parseInt(activeUserId));
-    messagesComponent.data= userMessageData.messages;
+    messagesComponent.data = userMessageData.messages;
 })
 
 
@@ -94,7 +92,7 @@ function setupMessageListener() {
     signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (messageData) => {
         if (messageData.fromUserId === getChattingUserId() || messageData.toUserId === getChattingUserId()) {
             const messagesComponent = document.querySelector('messages-component');
-            messagesComponent.data =messageData;
+            messagesComponent.data = messageData;
         }
     });
 }
