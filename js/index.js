@@ -1,6 +1,5 @@
 import { signalRConnection, startConnection } from './signalr.js';
 import { fetchUsers } from './services/userService.js';
-import { getUserMessagesById } from './services/messageService.js';
 import { fetchMessages, mapUserLatestMessages, mapUserMessages } from './services/messageService.js';
 import { EVENTS, RECEIVE_FUNCTION_NAMES } from './constants.js';
 import { getCurrentUserInfo } from './services/valueHelper.js';
@@ -51,18 +50,15 @@ async function initializeData() {
         const mappedUserLatestMessageData = mapUserLatestMessages(usersResponse, messagesResponse.messages);
         const mappedUserMessagesData = mapUserMessages(usersResponse, messagesResponse.messages);
 
-        console.log("sa", mappedUserMessagesData.find((data,index) => data.userId == 7));
-        
-        ls.saveDataToLocalStorage(mappedUserLatestMessageData, mappedUserMessagesData);
-
+        ls.saveDataToLocalStorage(usersResponse, mappedUserLatestMessageData, mappedUserMessagesData);
         sidePanelComponent.data = mappedUserLatestMessageData;
         messagesComponent.data = mappedUserMessagesData.messages;
 
         var user = getCurrentUserInfo();
-        activeChattingUserComponent.data = {
-            username: user.id,
-            id: user.id
-        }
+        // activeChattingUserComponent.data = {
+        //     username: user.id,
+        //     id: user.id
+        // }
 
     } catch (error) {
         console.error('Error initializing data:', error);
@@ -72,10 +68,13 @@ async function initializeData() {
 document.querySelector('side-panel-component').addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, async (event) => {
     const { activeUserId } = event.detail;
     console.log(activeUserId);
-    var userMessageData = getUserMessagesById(parseInt(activeUserId));
-    messagesComponent.data = userMessageData.messages;
-})
 
+    var userMessageData = ls.getUserMessagesFromStorage(parseInt(activeUserId));
+    messagesComponent.data = userMessageData.messages;
+    messageInputComponent.activeUserId = activeUserId;
+    var selectedUser = ls.getUserById(activeUserId);
+    activeChattingUserComponent.data = selectedUser;
+})
 
 messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
     messagesComponent.addNewMessage(event.detail);
@@ -87,22 +86,19 @@ messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
 //connection and signal events can dispatching from that base component
 //connection can be managable on my components ? 
 //and my child components can listen that base component's events. 
-
-function setupMessageListener() {
-    signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (messageData) => {
-        if (messageData.fromUserId === getChattingUserId() || messageData.toUserId === getChattingUserId()) {
-            const messagesComponent = document.querySelector('messages-component');
-            messagesComponent.data = messageData;
-        }
-    });
-}
-
-
-
 function clearLocalStorage() {
     localStorage.removeItem('access-token');
     localStorage.removeItem('messages');
     localStorage.removeItem('sidePanel_Data');
 }
+
+signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
+    console.log(message);
+    ls.addNewMessageToUserMessages(parseInt(message.toUserId), message);
+    if (messageInputComponent.activeUserId == message.fromUserId) {
+        messagesComponent.addNewMessage(message);
+    }
+
+});
 
 initialize();

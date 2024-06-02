@@ -14,12 +14,14 @@ export const signalRConnection = new signalR.HubConnectionBuilder()
             "crossorigin": true
         }
     })
-    .withAutomaticReconnect(1000,2000,3000)
+    .withAutomaticReconnect(10,20,30)
     .build();
 
 export async function startConnection() {
     try {
+        console.log("Connection starting.");
         await signalRConnection.start();
+        window.signalR = signalRConnection;
         console.log("SignalR Connected.");
     } catch (err) {
         console.log(err);
@@ -27,7 +29,8 @@ export async function startConnection() {
 };
 
 signalRConnection.onclose(async () => {
-    // await startConnection();
+    console.log("reconnectiong")
+    await startConnection();
 });
 
 

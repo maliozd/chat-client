@@ -1,5 +1,6 @@
 import { getCurrentUserInfo } from '../services/valueHelper.js'
-import { signalRConnection } from '../signalr.js';
+import { EVENTS } from '../constants.js';
+import { sendChatMessage } from '../services/messageService.js';
 
 class MessageInputComponent extends HTMLElement {
     constructor() {
@@ -39,7 +40,7 @@ class MessageInputComponent extends HTMLElement {
         </div>
     `;
 
-        this._chattingUserId = 0;
+        this._activeUserId = 0; //last 
     }
 
 
@@ -49,10 +50,11 @@ class MessageInputComponent extends HTMLElement {
             if (event.key === 'Enter') {
                 const message = {
                     messageText: inputField.value,
-                    fromUserId: getCurrentUserInfo(),
-                    toUserId: this._chattingUserId,
+                    fromUserId: parseInt(getCurrentUserInfo().id),
+                    toUserId: parseInt(this._activeUserId),
                     timestamp: new Date()
                 };
+                // console.log(message);
                 await sendChatMessage(message);
                 inputField.value = '';
                 this.dispatchEvent(new CustomEvent(EVENTS.MESSAGE_SENDED, {
@@ -63,13 +65,14 @@ class MessageInputComponent extends HTMLElement {
                 }));
             }
         });
-        console.log('selamun aleyküm')
+    }
+    set activeUserId(value) {
+        this._activeUserId = value;
     }
 
-    setChattingUserId(userId) {
-        this._chattingUserId = userId;
-
+    get activeUserId() {
+        return this._activeUserId;
     }
+
 }
-
 customElements.define('message-input-component', MessageInputComponent);

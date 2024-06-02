@@ -1,13 +1,11 @@
-import activeUserInstance from '../states/activeUserStateManager.js';
-import { EVENTS } from '../constants.js';
-import { getUserMessagesById } from '../services/messageService.js';
 import { getCurrentUserInfo } from '../services/valueHelper.js';
+import { signalRConnection } from '../signalr.js';
+import { RECEIVE_FUNCTION_NAMES } from '../constants.js';
+
 class MessagesComponent extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    console.log("selamun aleyküm")
-
     this.shadowRoot.innerHTML = `
 <style>
 :host {
@@ -24,31 +22,54 @@ class MessagesComponent extends HTMLElement {
     display: flex;
     align-items: flex-start;
     margin-bottom: 10px;
+    margin:12px;
+
   }
   
   .message.self {
     flex-direction: row-reverse;
   }
   
-  .message p {
-    padding: 10px;
+  .message-content {
+    padding: 18px;
     border-radius: 5px;
     background-color: #fff;
     max-width: 80%;
-    margin: 0 5px;
+    position: relative;
+    display: inline-block;
+    word-wrap: break-word;
+    font-size:20px;
   }
-  
-  .message.self p {
-    background-color: #ddd;
+
+
+
+ 
+  .timestamp {
+    font-size: 10px;
+    color: #999;
+    position: absolute;
+    bottom: -15px;
+    right: 0;
   }
-  
-  .message img {
-    width: 40px;
-    height: 40px;
+
+  .status-icon {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    margin-right: 10px;
+    position: absolute;
+    bottom: -15px;
+    left: 0;
   }
-  </style>
+
+  .status-read {
+    background-color: blue;
+  }
+
+  .status-unread {
+    background-color: gray;
+  }
+
+</style>
   
   <div class="messages"></div>
   `;
@@ -60,32 +81,33 @@ class MessagesComponent extends HTMLElement {
     this._data = value;
     this.render();
   }
-  
+
   get data() {
     return this._data;
   }
-  
+
   connectedCallback() {
-    this.render(); 
-    console.log("selamun aleyküm")
+    this.render();
+   
   }
 
   disconnectedCallback() {
-    console.log('disconnected');
   }
-  
 
   render() {
-    console.log("rendering messages...");
     const messagesList = this.shadowRoot.querySelector('.messages');
+    if (!this._data)
+      return;
     messagesList.innerHTML = this._data.map(message =>
       `<div class="message ${message.fromUserId === this._userId ? 'self' : 'other'}">
-        <img src="https://via.placeholder.com/40" alt="User Image">
-        <p>${message.messageText}</p>
+        <div class="message-content">
+          ${message.messageText}
+          <span class="timestamp">${new Date(message.timestamp).toLocaleString()}</span>
+          <span class="status-icon ${message.isRead ? 'status-read' : 'status-unread'}"></span>
+        </div>
       </div>`
     ).join('');
     this.scrollToBottom();
-
   }
 
   addNewMessage(messageData) {
@@ -95,8 +117,10 @@ class MessagesComponent extends HTMLElement {
 
   scrollToBottom() {
     const messagesList = this.shadowRoot.querySelector('.messages');
-    messagesList.scrollTop = messagesList.scrollHeight;
+    messagesList.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    // messagesList.scrollTop = messagesList.scrollHeight;
   }
 }
 
 customElements.define('message-list-component', MessagesComponent);
+// <img src="https://via.placeholder.com/40" alt="User Image">

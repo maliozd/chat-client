@@ -11,7 +11,7 @@ class SidePanelComponent extends HTMLElement {
           display: flex;
           flex-direction: column;
           height: 100vh;
-          width: 250px;
+          width: 400px;
           background-color: #f0f0f0;
           border-right: 1px solid #ddd;
           padding: 20px;
@@ -70,6 +70,7 @@ class SidePanelComponent extends HTMLElement {
           // 38bce848
           // 20bcf0a0
         }
+        
       </style>
 
       <div class="search-bar">

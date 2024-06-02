@@ -22,11 +22,29 @@ export async function fetchMessages() {
         console.error(error)
     }
 }
+const ls = window.lsHelper;
 
 export async function sendChatMessage(message) {
-    signalRConnection.invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
+    await signalRConnection.invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
+    ls.addNewMessageToUserMessages(parseInt(message.toUserId), message);
 }
 
+/** 
+@param message dataModel
+id
+messageText
+fromUserId
+toUserId
+timestamp
+isRead 
+*/
+
+/**
+ * maps each user to their latest message
+ * @param {Array} users -  list of users. each user is an object with at least an 'id' property.
+ * @param {Array} messages -  list of messages. each message is an object with "id","messageText",'fromUserId', 'toUserId', and 'timestamp' properties.
+ * @returns {Array} - A new list of users, each with an additional 'latestMessage' property containing their most recent, newest, message.
+ */
 export function mapUserLatestMessages(users, messages) {
     return users.map(user => {
         const latestMessage = messages
@@ -35,8 +53,13 @@ export function mapUserLatestMessages(users, messages) {
         return { ...user, latestMessage };
     });
 }
+/**
+ * maps each user to all their messages.
+ * @param {Array} users -  list of users. Each user is an object with at least an 'id' property.
+ * @param {Array} messages -  list of messages. Each message is an object with 'fromUserId', 'toUserId', and 'timestamp' properties.
+ * @returns {Array} - A new list of objects where each object contains a 'userId' and an array of 'messages' for that user.
+ */
 export function mapUserMessages(users, messages) {
-    // console.log(messages);
     return users.map(user => {
         const userMessages = messages
             .filter(message => message.fromUserId == user.id || message.toUserId == user.id)
@@ -48,9 +71,3 @@ export function mapUserMessages(users, messages) {
     });
 }
 
-export function getUserMessagesById(userId) {
-    var ls = new LocalStorageHelper();
-    var userMessages = ls.getUserMessagesFromStorage(userId);
-    console.log(userMessages);
-    return userMessages;
-}
