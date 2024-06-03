@@ -1,0 +1,17 @@
+@import '../config/config.css';
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    appearance: none;
+}
+
+a{
+    text-decoration: none;
+    color: var(--foregroundColor)
+}
+
+ul{
+    list-style: none;
+}

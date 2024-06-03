@@ -1,9 +1,3 @@
-const componentName = 'index'
+import { StyleInjector } from "../../services/styleInjector/style-injector.js";
 
-import { get } from "../../helper/pathFinder.js"
-import { nodeHandler } from "../../helper/nodeHandler.js"
-import { styleInjector } from "../../helper/styleInjector.js"
-
-new styleInjector('link', get.path.components(componentName, 'index.css'))
-
-const leftPanel = new nodeHandler(document.body, 'side-panel')
+const rootStyle = new StyleInjector('./src/components/index/index.css', document.head)
