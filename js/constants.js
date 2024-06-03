@@ -5,10 +5,12 @@ export const EVENTS = {
 };
 export const RECEIVE_FUNCTION_NAMES = {
     MESSAGE_RECEIVED : "MessageReceived",
-    USER_CONNECTED: 'userConnected'
+    USER_CONNECTED: 'userConnected',
+    USER_ONLINE_STATUS_CHANGED: 'UserOnlineStatusChanged'
 }
 export const INVOKE_FUNCTION_NAMES = {
-    SEND_MESSAGE : "SendMessage"
+    SEND_MESSAGE : "SendMessage",
+    WINDOW_STATE_CHANGED : "WindowStateChanged"
 }
 
 export const API_URLS = {

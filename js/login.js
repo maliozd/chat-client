@@ -3,11 +3,11 @@ import { EVENTS, API_URLS } from './constants.js';
 
 const loginBtn = document.getElementById('loginBtn');
 // console.log(loginBtn)
-// pass();
+pass();
 function pass(){
 
     const customEvent = new CustomEvent(EVENTS.LOGIN_SUCCESS, {
-        detail: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtZWhtZXRhbGlvemRlbWlyYUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVkZXNjbyIsIm5iZiI6MTcxNzIyODQ2NywiZXhwIjoxNzE3MjUwMDY3LCJpc3MiOiJjaGF0c2VydmljZUBzZXJ2aWNlLmNvbSIsImF1ZCI6ImNoYXRzZXJ2aWNlQHNlcnZpY2UuY29tIn0.NB1wW6ejtjRddVoU9WDRwQCSJmNb3NFMV9kuM1aXVEs" }
+        detail: { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEwMDgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJxd2VAcXdlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJxd2UiLCJuYmYiOjE3MTc0Mzk1MjksImV4cCI6MTcxNzQ2MTEyOSwiaXNzIjoiY2hhdHNlcnZpY2VAc2VydmljZS5jb20iLCJhdWQiOiJjaGF0c2VydmljZUBzZXJ2aWNlLmNvbSJ9.4VhPtTNpI_2-e9W0e7spwor3zEzxlgOdVjx-gmz01no" }
     });
     document.getElementById('userLoginForm').dispatchEvent(customEvent);
 }

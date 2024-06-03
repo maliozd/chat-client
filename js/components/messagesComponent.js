@@ -22,8 +22,8 @@ class MessagesComponent extends HTMLElement {
     display: flex;
     align-items: flex-start;
     margin-bottom: 10px;
-    margin:12px;
-
+    margin:25px 10px;
+    border-radius : 1000px!important;
   }
   
   .message.self {
@@ -42,14 +42,13 @@ class MessagesComponent extends HTMLElement {
   }
 
 
-
- 
   .timestamp {
     font-size: 10px;
     color: #999;
     position: absolute;
     bottom: -15px;
     right: 0;
+    text-wrap: nowrap;
   }
 
   .status-icon {

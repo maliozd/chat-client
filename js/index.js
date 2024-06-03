@@ -1,13 +1,12 @@
 import { signalRConnection, startConnection } from './signalr.js';
 import { fetchUsers } from './services/userService.js';
 import { fetchMessages, mapUserLatestMessages, mapUserMessages } from './services/messageService.js';
-import { EVENTS, RECEIVE_FUNCTION_NAMES } from './constants.js';
+import { EVENTS, INVOKE_FUNCTION_NAMES, RECEIVE_FUNCTION_NAMES } from './constants.js';
 import { getCurrentUserInfo } from './services/valueHelper.js';
 import './components/messageInputComponent.js'; // MessageInputComponent import edildi
 import './components/sidePanelComponent.js';
 import './db/localStoageHelper.js';
 import { LocalStorageHelper } from './db/localStoageHelper.js';
-import activeUserStateManager from './states/activeUserStateManager.js';
 
 const ls = new LocalStorageHelper();
 
@@ -55,10 +54,7 @@ async function initializeData() {
         messagesComponent.data = mappedUserMessagesData.messages;
 
         var user = getCurrentUserInfo();
-        // activeChattingUserComponent.data = {
-        //     username: user.id,
-        //     id: user.id
-        // }
+        activeChattingUserComponent.data = user;
 
     } catch (error) {
         console.error('Error initializing data:', error);
@@ -99,6 +95,17 @@ signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
         messagesComponent.addNewMessage(message);
     }
 
+});
+
+document.addEventListener('visibilitychange', async () => {
+    let isWindowVisible;
+    if (document.visibilityState == "visible") {
+        isWindowVisible = true
+    } else {
+        isWindowVisible = false
+    }
+    console.log(isWindowVisible);
+    await signalRConnection.invoke(INVOKE_FUNCTION_NAMES.WINDOW_STATE_CHANGED,isWindowVisible);
 });
 
 initialize();

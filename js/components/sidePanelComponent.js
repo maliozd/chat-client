@@ -1,89 +1,96 @@
-import activeUserInstance from '../states/activeUserStateManager.js';
 import { EVENTS } from '../constants.js'
 class SidePanelComponent extends HTMLElement {
   constructor(lastChattingUserId) { //bunu sonradan yapacağım
     super();
     this.attachShadow({ mode: 'open' })
+
     console.log("selamun aleyküm");
     this.shadowRoot.innerHTML = `
-        <style>
-        :host {
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
-          width: 400px;
-          background-color: #f0f0f0;
-          border-right: 1px solid #ddd;
-          padding: 20px;
-        }
+    <style>
+    :host {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 250px;
+      background-color: #f0f0f0;
+      border-right: 1px solid #ddd;
+    }
 
-        .search-bar {
-          display: flex;
-          align-items: center;
-          padding: 10px;
-          border-bottom: 1px solid #ddd;
-          margin-bottom: 20px;
-        }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+    }
 
-        .search-bar input {
-          flex: 1;
-          padding: 5px;
-          border: none;
-          outline: none;
-        }
+    .search-bar input {
+      flex: 1;
+      padding: 5px;
+      border: none;
+      outline: none;
+    }
 
-        .user-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
+    .user {
 
-        .user-list li {
-          display: flex;
-          align-items: center;
-          padding: 10px;
-          cursor: pointer;
-          transition: background-color 0.2s ease;
-        }
+    }
 
-        .user-list li:hover {
-          background-color: #38bce848;
-        }
+    .user-list {
+      flex: 1;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      overflow-y: auto;
+    }
 
-        .user-list img {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          margin-right: 10px;
-        }
+    .user-list li {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      transition: background-color 0.2s ease;
+    }
 
-        .user-list span {
-          font-size: 16px;
-        }
-        .user-list .active {
-          background-color: #20bcf0a0;
-          transition: 0.6s;
+    .user-list li:hover {
+      background-color: #79e0f0b8;
+    }
 
-        }
-        .user-list .active:hover {
-          background-color: #20bcf0a0;
-          // 38bce848
-          // 20bcf0a0
-        }
-        
-      </style>
+    .user-list img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
 
-      <div class="search-bar">
-        <input type="text" placeholder="Kullanıcı Ara">
-      </div>
+    .user-list span {
+      font-size: 16px;
+    }
+    .user-list .active {
+      background-color: #20bcf0a0;
+      transition: 0.6s;
+    }
+    .user-list .active:hover {
+      background-color: #38bce848;
+    }
+    .user-list li .active {
+      background-color: #71e0f1;
 
-      <ul class="user-list">
-       
-        </ul>
-    
-        `;
+    }
+    .qwerty {
+      display: flex;
+      flex-direction : column;
+      gap:5px;
+
+    }
+  </style>
+
+  <div class="search-bar">
+    <input type="text" placeholder="Kullanıcı Ara">
+  </div>
+
+  <ul class="user-list"></ul>
+
+  <side-panel-footer-component></side-panel-footer-component>
+`;
     this._data = [];
-    this._activeChattingUserId = activeUserInstance.activeUserId;
   }
 
   connectedCallback() {
@@ -101,7 +108,6 @@ class SidePanelComponent extends HTMLElement {
     return this._data;
   }
 
-
   render() {
     if (!this.shadowRoot) return;
     // console.log("active user id from render func : ", this._activeChattingUserId);
@@ -111,8 +117,10 @@ class SidePanelComponent extends HTMLElement {
                 <div class="user__picture">
                     <img src="https://static.vecteezy.com/system/resources/previews/021/548/095/non_2x/default-profile-picture-avatar-user-avatar-icon-person-icon-head-icon-profile-picture-icons-default-anonymous-user-male-and-female-businessman-photo-placeholder-social-network-avatar-portrait-free-vector.jpg" alt="${user.username}">
                 </div>
-                <div class="user__name">${user.username}</div>
-                <div class="user__latestMessage">${user.latestMessage ? user.latestMessage.messageText : ""}</div>
+                <div class="qwerty">
+                  <div class="user__name">${user.username}</div>
+                  <div class="user__latestMessage">${user.latestMessage ? user.latestMessage.messageText : ""}</div>
+                </div>
             </li>
         `).join('');
 
@@ -123,21 +131,33 @@ class SidePanelComponent extends HTMLElement {
     const userElements = this.shadowRoot.querySelectorAll('.user');
     userElements.forEach(element => {
       element.addEventListener('click', (e) => {
-        const userId = element.dataset.userId;
-        this._activeChattingUserId = userId;
-        let event = new CustomEvent(EVENTS.ACTIVE_USER_CHAT_CHANGED, {
-          detail: {
-            activeUserId: this._activeChattingUserId,
-          },
-          bubbles: true,
-          cancelable: false,
-          composed: true,
-        });
-        this.dispatchEvent(event);
+        this.setActiveElement(element)
+        this.dispatchUserChangedEvent(element);
       });
     });
   }
 
-}
+  setActiveElement(element) {
+    if (this.shadowRoot.querySelector('.active')) {
+      this.shadowRoot.querySelector('.active').classList.remove('active');
+    }
+    element.classList.add('active');
+  }
 
+  dispatchUserChangedEvent(element) {
+    const userId = element.dataset.userId;
+    if (userId == this._activeChattingUserId)
+      return;
+    this._activeChattingUserId = userId;
+    let event = new CustomEvent(EVENTS.ACTIVE_USER_CHAT_CHANGED, {
+      detail: {
+        activeUserId: this._activeChattingUserId,
+      },
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
+}
 customElements.define('side-panel-component', SidePanelComponent);

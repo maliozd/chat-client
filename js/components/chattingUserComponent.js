@@ -11,6 +11,7 @@ class ChattingUserComponent extends HTMLElement {
           align-items: center;
           padding: 10px;
           border-bottom: 1px solid #ddd;
+          background-color: #f0f0f0;
         }
   
         .profile-container {
@@ -87,9 +88,9 @@ class ChattingUserComponent extends HTMLElement {
     return ['data'];
   }
 
-  set data(value) {
-    if (JSON.stringify(this._data) !== JSON.stringify(value)) {
-      this._data = value;
+  set data(user) {
+    if (JSON.stringify(this._data) !== JSON.stringify(user)) {
+      this._data = user;
       this.render();
     }
   }
