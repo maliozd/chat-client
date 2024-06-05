@@ -9,6 +9,8 @@
     padding: calc(var(--generalPadding) / 2);
     
     overflow: auto;
+
+    padding-bottom: calc(var(--inputHeight) + 10px);
 }
 
 ul {
@@ -18,28 +20,4 @@ ul {
 
     margin: 0;
     padding: 0;
-}
-
-li{
-    width: fit-content;
-    
-    padding: calc(var(--generalPadding) / 2) var(--generalPadding);
-
-    border: 1px solid rgba(var(--__primaryColor),.25);
-    border-radius: var(--generalRadius);
-
-    font-size: 1rem;
-
-    background-color: var(--backgroundColor);
-    color: white;
-}
-
-li[mine]{
-    margin-left: auto;
-    border-bottom-right-radius: 0;
-}
-
-li[them]{
-    margin-right: auto;
-    border-bottom-left-radius: 0;
 }

@@ -1,4 +1,5 @@
 import { injectStyle } from "../../services/style-injector/style-injector.js"
+import { icons } from '../icons/icons.js'
 
 export class CC_User_Item extends HTMLElement {
     constructor() {
@@ -28,6 +29,9 @@ export class CC_User_Item extends HTMLElement {
                 <h2>${this._params.name}</h2>
                 <span>${this._params.lastMessage}</span>
             </div>
+            <button>
+                ${icons.more}
+            </button>
         `
 
         this._root.appendChild(this._wrapper)

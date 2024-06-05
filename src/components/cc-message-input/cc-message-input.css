@@ -1,0 +1,71 @@
+@import '../../config/reset.css';
+
+:host{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: var(--inputHeight);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: rgba(var(--__backgroundColor), .5);
+    backdrop-filter: blur(var(--backgroundBlurStrength));
+}
+
+.__wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 10px;
+
+    padding: 0 10px;
+
+    width: 100%;
+}
+
+input{
+    width: 100%;
+    
+    padding: 0 10px;
+
+    border: solid 1px rgba(var(--__primaryColor), .25);
+    border-radius: 99999px;
+    
+    background-color: rgba(var(--__backgroundColor), .5);
+    color: white;
+}
+
+input:focus{
+    outline: 2px solid rgba(var(--__primaryColor), .5);
+}
+
+button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid var(--primaryColor);
+    border-radius: 100%;
+    
+    background-color: rgba(var(--__primaryColor), .25);
+    
+    cursor: pointer;
+
+    transition: .45s;
+}
+
+button:hover{
+    background-color: rgba(var(--__primaryColor), .5);
+}
+
+button svg{
+    width: 15px;
+    fill: white;
+}

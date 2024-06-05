@@ -1,0 +1,75 @@
+:host{
+    display: flex;
+}
+
+:host([mine]) span[message]{
+    border-bottom-right-radius: 0;
+}
+
+:host([them]) span[message]{
+    border-bottom-left-radius: 0;
+}
+
+:host([mine]) .__wrapper{
+    flex-direction: row-reverse;
+}
+
+:host([them]) .__wrapper{
+    flex-direction: row;
+}
+
+.__wrapper{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    
+    width: 100%;
+}
+
+.__wrapper:hover span[time], .__wrapper:hover button{
+    pointer-events: all;
+    opacity: 1;
+}
+
+span{
+    display: block;
+}
+
+span[message]{
+    padding: calc(var(--generalPadding) / 2) var(--generalPadding);
+
+    border: 1px solid rgba(var(--__primaryColor),.25);
+    border-radius: var(--generalRadius);
+
+    font-size: 1rem;
+
+    background-color: var(--backgroundColor);
+    color: white;
+}
+
+span[time]{
+    font-size: .6rem;
+    color: rgba(var(--__foregroundColor), .5);
+
+    opacity: 0;
+    transition: .45s;
+}
+
+button{
+    appearance: none;
+    background: transparent;
+    border: none;
+
+    transition: .45s;
+
+    opacity: 0;
+    pointer-events: none;
+
+    cursor: pointer;
+}
+
+button svg {
+    display: block;
+    width: 10px;
+    fill: rgba(var(--__foregroundColor), .5);
+}

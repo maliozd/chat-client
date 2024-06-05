@@ -31,6 +31,11 @@
     background-color: rgba(var(--__backgroundColor), 1);
 }
 
+.__wrapper:hover button{
+    opacity: 1;
+    pointer-events: all;
+}
+
 img{
     width: 50px;
     height: 50px;
@@ -51,4 +56,25 @@ span{
     font-size: .8rem;
 
     color: rgba(var(--__foregroundColor), .75)
+}
+
+button{
+    margin-left: auto;
+
+    appearance: none;
+    background: transparent;
+    border: none;
+
+    transition: .45s;
+
+    opacity: 0;
+    pointer-events: none;
+
+    cursor: pointer;
+}
+
+button svg {
+    display: block;
+    width: 10px;
+    fill: rgba(var(--__foregroundColor), .5);
 }

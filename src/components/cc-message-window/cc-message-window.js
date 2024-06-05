@@ -1,5 +1,5 @@
-import { staticValues } from '../static.js'
 import { injectStyle } from '../../services/style-injector/style-injector.js'
+import { CC_Message_Item } from '../cc-message-item/cc-message-item.js'
 
 export class CC_Message_Window extends HTMLElement {
     constructor() {
@@ -8,36 +8,29 @@ export class CC_Message_Window extends HTMLElement {
         this._messageData = null
 
         this._htmlElements = {
-            wrapper: document.createElement('ul'),
-            message: document.createElement('li'),
             date: document.createElement('span'),
             status: document.createElement('div'),
         }
 
         this._root = this.attachShadow({ mode: 'open' })
+        this._wrapper = document.createElement('ul')
+        this._wrapper.className = '__wrapper'
 
         injectStyle('./../src/components/cc-message-window/cc-message-window.css', this._root)
     }
 
-    createMessageElement(value) {
-        let dummy = this._htmlElements.message.cloneNode(true)
-
-        dummy.setAttribute(`${(staticValues.currentUserId === value.from) ? 'mine' : 'them'}`, '')
-
-        dummy.textContent = value.message
-
-        this._htmlElements.wrapper.appendChild(dummy)
-    }
-
     render() {
         if (this._messageData) {
-            this._htmlElements.wrapper.innerHTML = null
-
             this._messageData.forEach(value => {
-                this.createMessageElement(value)
+                let message = document.createElement('cc-message-item')
+
+                message.data = value
+                message.setAttribute(((value.from === 1) ? 'mine' : 'them'), '')
+
+                this._wrapper.appendChild(message)
             })
 
-            this._root.append(this._htmlElements.wrapper)
+            this._root.append(this._wrapper)
         }
     }
 

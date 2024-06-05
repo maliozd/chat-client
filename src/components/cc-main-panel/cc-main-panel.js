@@ -4,6 +4,7 @@ const template = document.createElement("template")
 
 template.innerHTML = `
     <slot name="messageWindow"></slot>
+    <slot name="messageInput"></slot>
 `
 
 export class CC_MainPanel extends HTMLElement {
