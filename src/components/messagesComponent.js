@@ -25,11 +25,16 @@ class MessagesComponent extends HTMLElement {
     margin:25px 10px;
     border-radius : 1000px!important;
   }
-  
-  .message.self {
-    flex-direction: row-reverse;
+
+
+  .message-content.message-self {
+    background-color: black;
+    align-items: flex-end;
   }
-  
+
+  .message-content.message-other {
+    background-color: white;
+  }
   .message-content {
     padding: 18px;
     border-radius: 5px;
@@ -73,8 +78,8 @@ class MessagesComponent extends HTMLElement {
   <div class="messages"></div>
   `;
     this._data = [];
-    if (getCurrentUserInfo())
-      this._userId = getCurrentUserInfo().id;
+    this._userId = getCurrentUserInfo().id;
+
   }
 
   set data(value) {
@@ -95,11 +100,13 @@ class MessagesComponent extends HTMLElement {
   }
 
   render() {
+    if (getCurrentUserInfo())
+      this._userId = getCurrentUserInfo().id;
     const messagesList = this.shadowRoot.querySelector('.messages');
     if (!this._data)
       return;
     messagesList.innerHTML = this._data.map(message =>
-      `<div class="message ${message.fromUserId === this._userId ? 'self' : 'other'}">
+      `<div class="message message-${parseInt(message.fromUserId) == parseInt(this._userId) ? 'self' : 'other'}">
         <div class="message-content">
           ${message.messageText}
           <span class="timestamp">${new Date(message.timestamp).toLocaleString()}</span>
