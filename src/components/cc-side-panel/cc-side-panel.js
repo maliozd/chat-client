@@ -6,6 +6,7 @@ template.innerHTML = `
 `
 
 export class CC_SidePanel extends HTMLElement {
+    #root
     constructor() {
         super()
 
