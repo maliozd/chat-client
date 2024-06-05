@@ -1,0 +1,47 @@
+:host{
+    display: block;
+}
+
+.__wrapper{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: var(--generalPadding);
+    
+    border: 1px solid rgba(var(--__primaryColor), .1);
+    border-radius: calc(var(--generalRadius) / 2);
+    
+    background-color: rgba(var(--__backgroundColor), .75);
+    
+    cursor: pointer;
+    
+    transition: .45s;
+}
+
+.__wrapper:hover{
+    border: 1px solid rgba(var(--__primaryColor), .25);
+    background-color: rgba(var(--__backgroundColor), 1);
+}
+
+img{
+    width: 50px;
+    height: 50px;
+    
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 100%;
+}
+
+h2{
+    margin: 0;
+
+    font-size: 1rem;
+}
+
+span{
+    font-size: .8rem;
+
+    color: rgba(var(--__foregroundColor), .75)
+}
