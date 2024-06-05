@@ -13,10 +13,12 @@ export class CC_User_Item extends HTMLElement {
         }
 
         this._root = this.attachShadow({ mode: 'open' })
+        injectStyle('src/components/cc-user-item/cc-user-item.css', this._root)
+
+        this._internals = this.attachInternals()
+
         this._wrapper = document.createElement("div")
         this._wrapper.className = '__wrapper'
-
-        injectStyle('src/components/cc-user-item/cc-user-item.css', this._root)
     }
 
     render() {
@@ -38,6 +40,14 @@ export class CC_User_Item extends HTMLElement {
     }
 
     get params() { return this._params }
+
+    set current(flag) {
+        if (flag) {
+            this._internals.states.add('selected')
+        } else {
+            this._internals.states.delete('selected')
+        }
+    }
 }
 
 customElements.define('cc-user-item', CC_User_Item)

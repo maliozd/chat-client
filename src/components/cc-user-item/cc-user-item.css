@@ -1,5 +1,12 @@
 :host{
     display: block;
+
+    transition: .45s;
+}
+
+:host(:state(selected)) .__wrapper{
+    background-color: rgba(var(--__backgroundColor), 1);
+    border: 1px solid rgba(var(--__primaryColor), 1);
 }
 
 .__wrapper{
