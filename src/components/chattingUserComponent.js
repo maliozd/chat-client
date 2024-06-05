@@ -1,3 +1,5 @@
+import { RECEIVE_FUNCTION_NAMES } from '../constants.js';
+import { signalRConnection } from '../signalr.js';
 class ChattingUserComponent extends HTMLElement {
   constructor() {
     super();
@@ -79,6 +81,11 @@ class ChattingUserComponent extends HTMLElement {
       </div>
     `;
       this._data = {};
+
+      signalRConnection.on(RECEIVE_FUNCTION_NAMES.USER_ONLINE_STATUS_CHANGED, (userId, status) => {
+        console.log(`UserId : ${userId} now ${status == true ? 'online' : 'offline'}`);
+      });
+
     } catch (error) {
       console.error(error);
     }
@@ -111,15 +118,19 @@ class ChattingUserComponent extends HTMLElement {
   attributeChangedCallback() {
     this.render();
   }
-
-  render() {
-    if (this._data) {
-      this.shadowRoot.querySelector('.user_name').textContent = this._data.username || 'Kullanıcı Adı';
-      this.shadowRoot.querySelector('.last-seen').textContent = `Last seen: ${this._data.lastSeen || 'unknown'}`;
-      const statusIndicator = this.shadowRoot.querySelector('.status-indicator');
-      statusIndicator.className = 'status-indicator ' + (this._data.status || 'status-active');
-    }
+  
+render() {
+  if (this._data) {
+    this.shadowRoot.querySelector('.user_name').textContent = this._data.username || 'Kullanıcı Adı';
+    this.shadowRoot.querySelector('.last-seen').textContent = `Last seen: ${this._data.lastSeen || 'unknown'}`;
+    const statusIndicator = this.shadowRoot.querySelector('.status-indicator');
+    statusIndicator.className = 'status-indicator ' + (this._data.status || 'status-active');
   }
+
+
+  
+
+}
   
 }
 

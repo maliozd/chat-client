@@ -1,4 +1,4 @@
-import { getCurrentUserInfo } from '../services/valueHelper.js'
+import { getCurrentUserInfo } from '../services/valueHelper.js';
 import { EVENTS } from '../constants.js';
 import { sendChatMessage } from '../services/messageService.js';
 

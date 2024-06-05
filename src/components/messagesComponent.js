@@ -73,7 +73,8 @@ class MessagesComponent extends HTMLElement {
   <div class="messages"></div>
   `;
     this._data = [];
-    this._userId = getCurrentUserInfo().id;
+    if (getCurrentUserInfo())
+      this._userId = getCurrentUserInfo().id;
   }
 
   set data(value) {
@@ -87,7 +88,7 @@ class MessagesComponent extends HTMLElement {
 
   connectedCallback() {
     this.render();
-   
+
   }
 
   disconnectedCallback() {

@@ -63,7 +63,7 @@ export function mapUserMessages(users, messages) {
     return users.map(user => {
         const userMessages = messages
             .filter(message => message.fromUserId == user.id || message.toUserId == user.id)
-            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
         return {
             userId: user.id,
             messages: [...userMessages]

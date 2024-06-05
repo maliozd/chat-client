@@ -14,6 +14,8 @@ export function getCurrentUserInfo() {
             var payload = JSON.parse(jsonPayload);
             */
     var token = getLsToken();
+    if(!token)
+        return;
     var payload = JSON.parse(atob(token.split('.')[1]));
     var id = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
     var username = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];

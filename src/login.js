@@ -3,7 +3,7 @@ import { EVENTS, API_URLS } from './constants.js';
 
 const loginBtn = document.getElementById('loginBtn');
 // console.log(loginBtn)
-pass();
+// pass();
 function pass(){
 
     const customEvent = new CustomEvent(EVENTS.LOGIN_SUCCESS, {
