@@ -1,0 +1,8 @@
+@import '../../config/reset.css';
+
+:host{
+    display: block;
+    width: var(--sidePanelWidth);
+    height: 100%;
+    background-color: blue;
+}

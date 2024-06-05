@@ -1,10 +1,13 @@
 @import '../config/config.css';
 
 *{
+    box-sizing: border-box;
+    appearance: none;ß
+}
+
+body{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    appearance: none;
 }
 
 a{
