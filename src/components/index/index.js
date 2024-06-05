@@ -14,8 +14,13 @@ injectStyle('src/components/index/index.css', document.head)
 
 const customElements = {
     CC_Message_Window: document.querySelector('cc-message-window'),
-    CC_User_List: document.querySelector('cc-user-list')
+    CC_User_List: document.querySelector('cc-user-list'),
+    CC_Message_Input: document.querySelector('cc-message-input')
 }
 
 customElements.CC_Message_Window.messageData = messageData
 customElements.CC_User_List.userData = usersData
+
+customElements.CC_Message_Input.addEventListener('messagesended', e => {
+    console.log(e.detail);
+})
