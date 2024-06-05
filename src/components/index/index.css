@@ -1,12 +1,31 @@
 @import '../../config/reset.css';
 
 body{
+    position: relative;
+
     width: 100vw;
     height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
+    
     background-color: var(--backgroundColor);
+    background-image: url('../../images/background/test-1.jpg');
     color: var(--foregroundColor);
+    
     overflow: hidden;
+}
+
+body::before{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(var(--__backgroundColor), var(--backgroundFilterStrength));
+    backdrop-filter: blur(var(--backgroundBlurStrength));
 }

@@ -2,7 +2,10 @@
 
 :host{
     display: block;
+
     width: var(--sidePanelWidth);
     height: 100%;
-    background-color: blue;
+
+    background-color: rgba(var(--__backgroundColor), .5);
+    backdrop-filter: blur(calc(var(--backgroundBlurStrength) * 10 ));
 }
