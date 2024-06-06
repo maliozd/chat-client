@@ -31,6 +31,10 @@
     opacity: 1;
 }
 
+.__wrapper:hover span[message]{
+    box-shadow: 0 0 5px rgba(var(--__primaryColor), .5);
+}
+
 span{
     display: block;
 }
@@ -44,7 +48,9 @@ span[message]{
     font-size: 1rem;
 
     background-color: var(--backgroundColor);
-    color: white;
+    color: var(--foregroundColor);
+
+    transition: .45s;
 }
 
 span[time]{

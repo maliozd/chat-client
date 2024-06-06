@@ -7,6 +7,7 @@
 :host(:state(selected)) .__wrapper{
     background-color: rgba(var(--__backgroundColor), 1);
     border: 1px solid rgba(var(--__primaryColor), 1);
+    box-shadow: 0 0 20px rgba(var(--__primaryColor), .25);
 }
 
 .__wrapper{

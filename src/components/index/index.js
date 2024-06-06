@@ -32,8 +32,8 @@ customElements.CC_Message_Input.addEventListener('messagesended', e => {
     console.log(e.detail);
 })
 
-customElements.CC_Popup.addEventListener('login', e => {
-    console.log(e.detail);
+// customElements.CC_Popup.addEventListener('login', e => {
+//     console.log(e.detail);
 
-    customElements.CC_Popup.remove()
-})
+//     customElements.CC_Popup.remove()
+// })

@@ -101,15 +101,11 @@ export class CC_Popup extends HTMLElement {
     }
 
     #debounce(func, wait) {
-        let timeout;
+        let timeout
         return function (...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
-
-    remove() {
-
+            clearTimeout(timeout)
+            timeout = setTimeout(() => func.apply(this, args), wait)
+        }
     }
 }
 
