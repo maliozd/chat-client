@@ -2,16 +2,28 @@ import { injectStyle } from '../../services/style-injector/style-injector.js'
 import { icons } from '../icons/icons.js'
 
 export class CC_Message_Input extends HTMLElement {
+    #wrapper
+    #sendButton
+    #inputField
+    #root
+
     constructor() {
+
         super()
 
-        this._root = this.attachShadow({ mode: 'open' })
-        injectStyle('src/components/cc-message-input/cc-message-input.css', this._root)
+        this.#root = this.attachShadow({ mode: 'open' })
 
-        this._wrapper = document.createElement('div')
-        this._wrapper.className = '__wrapper'
+        this.#initComponent()
+        this.#eventListener()
+    }
 
-        this._wrapper.innerHTML = `
+    #initComponent() {
+        injectStyle('src/components/cc-message-input/cc-message-input.css', this.shadowRoot)
+
+        this.#wrapper = document.createElement('div')
+        this.#wrapper.className = '__wrapper'
+
+        this.#wrapper.innerHTML = `
             <button attach>
                 ${icons.attach} 
             </button>
@@ -21,24 +33,25 @@ export class CC_Message_Input extends HTMLElement {
             </button>
         `
 
-        this._root.appendChild(this._wrapper)
+        this.#root.appendChild(this.#wrapper)
 
-        this._attach = this._root.querySelector('[attach]')
-        this._send = this._root.querySelector('[send]')
-        this._input = this._root.querySelector('[messageText]')
+        this.#sendButton = this.#root.querySelector('[send]')
+        this.#inputField = this.#root.querySelector('[messageText]')
+    }
 
-        this._input.addEventListener('keydown', (e) => {
+    #eventListener() {
+        this.#inputField.addEventListener('keydown', this.#debounce((e) => {
             if (e.key === 'Enter') {
-                this._handleEnterKey(this._input.value)
+                this.#handleMessageSend(this.#inputField.value);
             }
-        })
+        }, 100))
 
-        this._send.addEventListener('click', () => {
-            this._handleEnterKey(this._input.value)
+        this.#sendButton.addEventListener('click', () => {
+            this.#handleMessageSend(this.#inputField.value)
         })
     }
 
-    _handleEnterKey(value) {
+    #handleMessageSend(value) {
         const event = new CustomEvent('messagesended', {
             detail: {
                 message: value,
@@ -49,11 +62,19 @@ export class CC_Message_Input extends HTMLElement {
         });
 
         this.dispatchEvent(event);
-        this._clear()
+        this.#clear()
     }
 
-    _clear() {
-        this._input.value = null
+    #clear() {
+        this.#inputField.value = null
+    }
+
+    #debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
     }
 }
 
