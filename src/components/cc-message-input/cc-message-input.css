@@ -15,7 +15,7 @@
 
     background-color: rgba(var(--__backgroundColor), .5);
     backdrop-filter: blur(var(--backgroundBlurStrength));
-    border-top: 1px solid rgba(var(--__primaryColor), 1);
+    border-top: 1px solid rgba(var(--__primaryColor), .75);
     box-shadow: 0 0 50px -10px rgba(var(--__primaryColor), .5);
 }
 
@@ -61,7 +61,7 @@ button{
     
     cursor: pointer;
 
-    transition: .45s;
+    transition: var(--duration);
 }
 
 button:hover{

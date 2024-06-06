@@ -40,9 +40,11 @@ span{
 }
 
 span[message]{
+    max-width: 50%;
+
     padding: calc(var(--generalPadding) / 2) var(--generalPadding);
 
-    border: 1px solid rgba(var(--__primaryColor),.25);
+    border: 1px solid rgba(var(--__primaryColor),.5);
     border-radius: var(--generalRadius);
 
     font-size: 1rem;
@@ -50,7 +52,7 @@ span[message]{
     background-color: var(--backgroundColor);
     color: var(--foregroundColor);
 
-    transition: .45s;
+    transition: var(--duration);
 }
 
 span[time]{
@@ -58,7 +60,7 @@ span[time]{
     color: rgba(var(--__foregroundColor), .5);
 
     opacity: 0;
-    transition: .45s;
+    transition: var(--duration);
 }
 
 button{
@@ -66,7 +68,7 @@ button{
     background: transparent;
     border: none;
 
-    transition: .45s;
+    transition: var(--duration);
 
     opacity: 0;
     pointer-events: none;

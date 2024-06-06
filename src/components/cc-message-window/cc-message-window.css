@@ -9,7 +9,6 @@
     
     overflow: auto;
 
-;
     background-image: url('../../images/background/login-1.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
@@ -37,4 +36,34 @@ ul {
 
     margin: 0;
     padding: 0;
+}
+
+button[scrollDown]{
+    position: fixed;
+    bottom: calc(var(--inputHeight) + var(--generalPadding) + 10px);
+    right: calc(var(--generalPadding) + 10px);
+
+    width: 40px;
+    height: 40px;
+
+    background-color: rgba(var(--__backgroundColor), .75);
+    
+    border: 1px solid rgba(var(--__primaryColor), .75);
+    border-radius: 100%;
+
+    backdrop-filter: blur(var(--backgroundBlurStrength));
+
+    cursor: pointer;
+
+    transition: var(--duration);
+    opacity: 0;
+}
+
+button[show]{
+    opacity: 1;
+}
+
+button[scrollDown] svg{
+    width: 15px;
+    fill: rgba(var(--__primaryColor), .5);
 }

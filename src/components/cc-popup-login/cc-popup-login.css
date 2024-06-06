@@ -86,7 +86,7 @@ label{
     font-weight: 500;
     color: rgba(var(--__foregroundColor), .75);
     
-    transition: .4s;
+    transition: var(--duration);
 }
 
 input{

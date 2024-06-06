@@ -31,7 +31,7 @@ ul{
     background-color: rgba(var(--__primaryColor),.5);
     border-radius: 99999px;
 
-    transition: .45s;
+    transition: var(--duration);
 }
 
 ::-webkit-scrollbar-thumb:hover {

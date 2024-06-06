@@ -11,7 +11,7 @@ export class CC_SidePanel extends HTMLElement {
     constructor() {
         super()
 
-        this._root = this.attachShadow({ mode: 'closed' })
+        this._root = this.attachShadow({ mode: 'open' })
         injectStyle('./src/components/cc-side-panel/cc-side-panel.css', this._root)
 
         this._root.appendChild(template.content.cloneNode(true))

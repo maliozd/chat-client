@@ -52,17 +52,19 @@ export class CC_Message_Input extends HTMLElement {
     }
 
     #handleMessageSend(value) {
-        const event = new CustomEvent('messagesended', {
-            detail: {
-                message: value,
-                time: new Date()
-            },
-            bubbles: true,
-            composed: true
-        });
+        if (value !== '') {
+            const event = new CustomEvent('messagesended', {
+                detail: {
+                    message: value,
+                    time: new Date()
+                },
+                bubbles: true,
+                composed: true
+            });
 
-        this.dispatchEvent(event);
-        this.#clear()
+            this.dispatchEvent(event);
+            this.#clear()
+        }
     }
 
     #clear() {

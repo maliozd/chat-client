@@ -1,12 +1,12 @@
 :host{
     display: block;
 
-    transition: .45s;
+    transition: var(--duration);
 }
 
 :host(:state(selected)) .__wrapper{
     background-color: rgba(var(--__backgroundColor), 1);
-    border: 1px solid rgba(var(--__primaryColor), 1);
+    border: 1px solid rgba(var(--__primaryColor), .75);
     box-shadow: 0 0 20px rgba(var(--__primaryColor), .25);
 }
 
@@ -24,7 +24,7 @@
     
     cursor: pointer;
     
-    transition: .45s;
+    transition: var(--duration);
 }
 
 .__wrapper:hover{
@@ -66,7 +66,7 @@ button{
     background: transparent;
     border: none;
 
-    transition: .45s;
+    transition: var(--duration);
 
     opacity: 0;
     pointer-events: none;

@@ -25,7 +25,7 @@
 	background-color: rgba(var(--__backgroundColor), .5);
 	backdrop-filter: blur(var(--backgroundBlurStrength));
 
-    border-bottom: solid 1px rgba(var(--__primaryColor), 1);
+    border-bottom: solid 1px rgba(var(--__primaryColor), .75);
     box-shadow: 0 0 50px -10px rgba(var(--__primaryColor), .5);
 }
 

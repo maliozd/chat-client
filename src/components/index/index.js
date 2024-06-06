@@ -3,6 +3,7 @@ import { injectStyle } from "../../services/style-injector/style-injector.js";
 import { ChatClient } from "../chat-client/chat-client.js";
 import { CC_SidePanel } from '../cc-side-panel/cc-side-panel.js'
 import { CC_User_List } from "../cc-user-list/cc-user-list.js";
+import { CC_User_Item } from "../cc-user-item/cc-user-item.js";
 import { CC_MainPanel } from '../cc-main-panel/cc-main-panel.js'
 import { CC_Message_Window } from "../cc-message-window/cc-message-window.js";
 import { CC_Message_Input } from "../cc-message-input/cc-message-input.js";
@@ -20,6 +21,7 @@ const customElements = {
     CC_Message_Input: document.querySelector('cc-message-input'),
     CC_Title: document.querySelector('cc-title'),
     CC_Popup: document.querySelector('cc-popup'),
+    CC_Users: document.querySelectorAll('cc-user-item')
 }
 
 customElements.CC_Message_Window.messageData = messageData
@@ -27,10 +29,22 @@ customElements.CC_User_List.userData = usersData
 
 customElements.CC_Title.userData = usersData[0]
 
-
 customElements.CC_Message_Input.addEventListener('messagesended', e => {
-    console.log(e.detail);
+    customElements.CC_Message_Window.addMessage = {
+        "from": 1,
+        "type": 0,
+        "status": 3,
+        "message": e.detail.message,
+        "date": "2024-06-16T15:55:45Z"
+    }
 })
+
+customElements.CC_User_List._allUsers.forEach((user, i) => {
+    user.addEventListener('click', () => {
+        customElements.CC_Title.userData = usersData[i]
+        customElements.CC_Message_Window.messageData = messageData
+    })
+});
 
 // customElements.CC_Popup.addEventListener('login', e => {
 //     console.log(e.detail);
