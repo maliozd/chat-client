@@ -5,6 +5,7 @@ const template = document.createElement("template")
 template.innerHTML = `
     <slot name="sidePanel"></slot>
     <slot name="mainPanel"></slot>
+    <slot name="popup"></slot>
 `
 
 export class ChatClient extends HTMLElement {

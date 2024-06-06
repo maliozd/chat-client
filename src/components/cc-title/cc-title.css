@@ -1,49 +1,55 @@
-:host{
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
+@import '../../config/reset.css';
+
+:host {
+	position: absolute;
+	top: 0;
+	left: 0;
+
     width: 100%;
     height: var(--titleHeight);
-    
-    background-color: rgba(var(--__backgroundColor), .5);
-    backdrop-filter: blur(var(--backgroundBlurStrength));
 }
 
-.__wrapper{
-    display: flex;
-    justify-content: ;
-    align-items: center;
-    gap: 10px; 
+.__wrapper {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+    flex-direction: row;
+	gap: 10px;
+
+    padding: 10px;
 
     width: 100%;
     height: 100%;
 
-    padding: 10px 30px;
-    margin: 0;
+	background-color: rgba(var(--__backgroundColor), .5);
+	backdrop-filter: blur(var(--backgroundBlurStrength));
 
-    border: solid 1px rgba(var(--__primaryColor), .5)C
-}
-                   
-div{
-    display: flex!important;
-    flex-direction: column!important;
-
-    width: 100%!important;
-    height: 100%!important;
+    border-bottom: solid 1px rgba(var(--__primaryColor), 1);
 }
 
-img{
-    width: 40px;
-    height: 40px;
+div {
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+    gap: 2px;
 
-    border-radius: 100%;
-
-    object-fit: cover;
-    object-position: center;
+    height: var(--titleHeight);
 }
 
-h2{
-    padding: 0;
-    margin: 0;
+img {
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+h2 {
+	padding: 0;
+	margin: 0;
+}
+
+span{
+    font-size: .7rem;
+    color: rgba(var(--__foregroundColor), .5)
 }

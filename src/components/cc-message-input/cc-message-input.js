@@ -28,7 +28,7 @@ export class CC_Message_Input extends HTMLElement {
                 ${icons.attach} 
             </button>
             <input messageText type="text">
-            <button send>
+            <button type="button" send>
                 ${icons.send} 
             </button>
         `

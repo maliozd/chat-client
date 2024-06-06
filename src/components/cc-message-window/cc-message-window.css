@@ -10,6 +10,7 @@
     
     overflow: auto;
 
+    padding-top: calc(var(--titleHeight) + 10px);
     padding-bottom: calc(var(--inputHeight) + 10px);
 }
 

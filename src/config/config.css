@@ -11,8 +11,8 @@
     --highlightColor: rgb(255, 255, 255);
     --__highlightColor: 255, 255, 255;
 
-    --primaryColor: rgb(255, 255, 170);
-    --__primaryColor: 255, 255, 170;
+    --primaryColor: rgb(170, 214, 255);
+    --__primaryColor: 170, 214, 255;
 
     --sidePanelWidth: 20%;
     --mainPanelWidth: 100%;
@@ -25,5 +25,5 @@
 
     --inputHeight: 50px;
 
-    --titleHeight: 75px;
+    --titleHeight: 70px;
 }
