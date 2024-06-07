@@ -86,6 +86,7 @@ export class CC_Message_Window extends HTMLElement {
     get messageData() { return this._messageData }
 
     set addMessage(value) {
+        console.log(value);
         let message = document.createElement('cc-message-item')
 
         message.data = value

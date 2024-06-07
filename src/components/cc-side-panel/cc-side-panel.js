@@ -3,7 +3,7 @@ import { injectStyle } from "../../services/style-injector/style-injector.js"
 const template = document.createElement('template')
 template.innerHTML = `
     <slot name=userList></slot>
-    <slot name=usersTitle></slot>
+    <slot name=userSettings></slot>
 `
 
 export class CC_SidePanel extends HTMLElement {

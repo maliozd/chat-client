@@ -9,6 +9,7 @@ import { CC_Message_Window } from "../cc-message-window/cc-message-window.js";
 import { CC_Message_Input } from "../cc-message-input/cc-message-input.js";
 import { CC_Title } from "../cc-title/cc-title.js";
 import { CC_Popup } from "../cc-popup-login/cc-popup-login.js";
+import { CC_UserSettings } from "../user-settings/user-settings.js";
 
 import { messageData } from '../messageData.js'
 import { usersData } from '../userData.js'
@@ -21,7 +22,8 @@ const customElements = {
     CC_Message_Input: document.querySelector('cc-message-input'),
     CC_Title: document.querySelector('cc-title'),
     CC_Popup: document.querySelector('cc-popup'),
-    CC_Users: document.querySelectorAll('cc-user-item')
+    CC_Users: document.querySelectorAll('cc-user-item'),
+    CC_UserSettings: document.querySelector('cc-user-settings')
 }
 
 customElements.CC_Message_Window.messageData = messageData
@@ -45,6 +47,8 @@ customElements.CC_User_List._allUsers.forEach((user, i) => {
         customElements.CC_Message_Window.messageData = messageData
     })
 });
+
+customElements.CC_UserSettings.userData = usersData[0]
 
 // customElements.CC_Popup.addEventListener('login', e => {
 //     console.log(e.detail);

@@ -44,7 +44,7 @@ export class CC_Message_Input extends HTMLElement {
             if (e.key === 'Enter') {
                 this.#handleMessageSend(this.#inputField.value);
             }
-        }, 100))
+        }, 300))
 
         this.#sendButton.addEventListener('click', () => {
             this.#handleMessageSend(this.#inputField.value)
