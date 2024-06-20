@@ -27,6 +27,10 @@ export class LocalStorageHelper {
         try {
             const userMessages = JSON.parse(localStorage.getItem('user_messages'));
             var data = userMessages.filter(element => element.userId == userId)[0];
+            console.log(data);
+            if (!data)
+                return null;
+            
             if (data.messages.length > 0) {
                 data.messages.forEach(msg => {
                     msg.isRead = true;

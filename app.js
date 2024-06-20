@@ -45,10 +45,11 @@ async function initializeData() {
         const messagesResponse = await fetchMessages();
         //şimdilik initial statik bir değer verdim
         //user & latest message
+
         const mappedUserLatestMessageData = mapUserLatestMessages(usersResponse, messagesResponse.messages);
         const mappedUserMessagesData = mapUserMessages(usersResponse, messagesResponse.messages);
 
-        ls.saveDataToLocalStorage(usersResponse, mappedUserLatestMessageData, mappedUserMessagesData);
+        ls.saveDataToLocalStorage(usersResponse, mappedUserLatestMessageData, messagesResponse.messages);
         sidePanelComponent.data = mappedUserLatestMessageData;
         messagesComponent.data = mappedUserMessagesData.messages;
 
@@ -65,7 +66,8 @@ document.querySelector('side-panel-component').addEventListener(EVENTS.ACTIVE_US
     console.log(activeUserId);
 
     var userMessageData = ls.getUserMessagesFromStorage(parseInt(activeUserId));
-    messagesComponent.data = userMessageData.messages;
+    console.log("qweqwew ",userMessageData);
+    messagesComponent.data = userMessageData == null ? [] : userMessageData.messages;
     messageInputComponent.activeUserId = activeUserId;
     var selectedUser = ls.getUserById(activeUserId);
     activeChattingUserComponent.data = selectedUser;
@@ -101,6 +103,8 @@ const handleVisibilityChange = throttle(async () => {
     console.log('window visible : ', isWindowVisible);
     await signalRConnection.invoke(INVOKE_FUNCTION_NAMES.WINDOW_STATE_CHANGED, isWindowVisible);
 }, 5000); // 5 saniye
+
+
 document.addEventListener('visibilitychange', handleVisibilityChange);
 
 

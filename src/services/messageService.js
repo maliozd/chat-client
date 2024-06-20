@@ -45,11 +45,14 @@ isRead
  * @param {Array} messages -  list of messages. each message is an object with "id","messageText",'fromUserId', 'toUserId', and 'timestamp' properties.
  * @returns {Array} - A new list of users, each with an additional 'latestMessage' property containing their most recent, newest, message.
  */
-export function mapUserLatestMessages(users, messages) {
+export function mapUserLatestMessages(users, userMessages) {
     return users.map(user => {
-        const latestMessage = messages
-            .filter(message => message.fromUserId === user.id || message.toUserId === user.id)
-            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+        const msgObj = userMessages.find(userAndMessages => userAndMessages.userId === user.id);
+        if (!msgObj) {
+            return { ...user, latestMessage: null };
+        }
+        const _messages = msgObj.messages;
+        const latestMessage = Array.from(_messages).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
         return { ...user, latestMessage };
     });
 }

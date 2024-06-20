@@ -27,13 +27,13 @@ class MessagesComponent extends HTMLElement {
   }
 
 
-  .message-content.message-self {
-    background-color: black;
+  .message-self {
     align-items: flex-end;
+    justify-content: end;
   }
 
-  .message-content.message-other {
-    background-color: white;
+  .message-other {
+    align-items: flex-start;
   }
   .message-content {
     padding: 18px;
@@ -103,6 +103,7 @@ class MessagesComponent extends HTMLElement {
     if (getCurrentUserInfo())
       this._userId = getCurrentUserInfo().id;
     const messagesList = this.shadowRoot.querySelector('.messages');
+    messagesList.innerHTML = '';
     if (!this._data)
       return;
     messagesList.innerHTML = this._data.map(message =>
