@@ -77,15 +77,12 @@ class ChattingUserComponent extends HTMLElement {
       </div>
       <div class="user-info">
         <span class="user_name">Kullanıcı Adı</span>
-        <small class="last-seen">Last seen: 2 hours ago</small>
+        <small class="last-seen"></small>
       </div>
     `;
       this._data = {};
-
-      signalRConnection.on(RECEIVE_FUNCTION_NAMES.USER_ONLINE_STATUS_CHANGED, (userId, status) => {
-        console.log(`UserId : ${userId} now ${status == true ? 'online' : 'offline'}`);
-      });
-
+      this._handleUserOnlineStatusChanged = this._handleUserOnlineStatusChanged.bind(this);
+      window.addEventListener('userOnlineStatusChanged', this._handleUserOnlineStatusChanged);
     } catch (error) {
       console.error(error);
     }
@@ -96,10 +93,8 @@ class ChattingUserComponent extends HTMLElement {
   }
 
   set data(user) {
-    if (JSON.stringify(this._data) !== JSON.stringify(user)) {
-      this._data = user;
-      this.render();
-    }
+    this._data = user;
+    this.render();
   }
 
   get data() {
@@ -111,6 +106,16 @@ class ChattingUserComponent extends HTMLElement {
     this.render();
   }
 
+  _handleUserOnlineStatusChanged(event) {
+    const { userId, status } = event.detail;
+    console.log(event);
+    if (parseInt(userId) === parseInt(this._data.id)) {
+      console.log(event);
+      this.shadowRoot.querySelector('.last-seen').textContent = status ? 'Online' : this.formatLastSeen(this._data.lastSeen);
+      console.log(`Chatting user id : ${this._data.id}`, `Status changed user id : ${userId}`);
+    }
+  }
+
   disconnectedCallback() {
     console.log("chatting user component disconnected from dom");
   }
@@ -118,20 +123,36 @@ class ChattingUserComponent extends HTMLElement {
   attributeChangedCallback() {
     this.render();
   }
-  
-render() {
-  if (this._data) {
-    this.shadowRoot.querySelector('.user_name').textContent = this._data.username || 'Kullanıcı Adı';
-    this.shadowRoot.querySelector('.last-seen').textContent = `Last seen: ${this._data.lastSeen || 'unknown'}`;
-    const statusIndicator = this.shadowRoot.querySelector('.status-indicator');
-    statusIndicator.className = 'status-indicator ' + (this._data.status || 'status-active');
+
+  formatLastSeen(lastSeen) {
+    if (lastSeen == null)
+      return 'Last seen : Unknown';
+    const lastSeenDate = new Date(lastSeen);
+    const now = new Date();
+
+    const isToday = lastSeenDate.toDateString() === now.toDateString();
+    const isYesterday = lastSeenDate.toDateString() === new Date(now.setDate(now.getDate() - 1)).toDateString();
+
+    if (isToday) {
+      return `Last seen: Today at ${lastSeenDate.getHours()}:${String(lastSeenDate.getMinutes()).padStart(2, '0')}`;
+    } 
+    else if (isYesterday){
+      return `Last seen: Yesterday at ${lastSeenDate.getHours()}:${String(lastSeenDate.getMinutes()).padStart(2, '0')}`;
+    }
+    else {
+      return `Last seen: ${lastSeenDate.toDateString()}`;
+    }
   }
 
+  render() {
+    if (this._data) {
+      this.shadowRoot.querySelector('.user_name').textContent = this._data.username || 'Kullanıcı Adı';
+      this.shadowRoot.querySelector('.last-seen').textContent = this.formatLastSeen(this._data.lastSeen);
+      const statusIndicator = this.shadowRoot.querySelector('.status-indicator');
+      statusIndicator.className = 'status-indicator ' + (this._data.status || 'status-active');
+    }
+  }
 
-  
-
-}
-  
 }
 
 customElements.define('chatting-user-component', ChattingUserComponent);

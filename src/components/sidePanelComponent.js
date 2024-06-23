@@ -83,7 +83,7 @@ class SidePanelComponent extends HTMLElement {
   </style>
 
   <div class="search-bar">
-    <input type="text" placeholder="Kullanıcı Ara">
+    <input type="text" id="txtSearch" placeholder="Kullanıcı Ara">
   </div>
 
   <ul class="user-list"></ul>
@@ -112,6 +112,7 @@ class SidePanelComponent extends HTMLElement {
     if (!this.shadowRoot) return;
     // console.log("active user id from render func : ", this._activeChattingUserId);
     const usersContainer = this.shadowRoot.querySelector('.user-list');
+    console.log('this data :',this._data);
     usersContainer.innerHTML = this._data.map(user => `
             <li class="${this._activeChattingUserId == user.id ? "user active" : "user"}" data-user-id="${user.id}">
                 <div class="user__picture">
@@ -135,6 +136,17 @@ class SidePanelComponent extends HTMLElement {
         this.dispatchUserChangedEvent(element);
       });
     });
+
+    this.shadowRoot.querySelector('#txtSearch').addEventListener('keyup', (e) => {
+      const searchText = this.shadowRoot.querySelector('#txtSearch').value;
+      const searchEvent = new CustomEvent(EVENTS.SEARCHING_USER, {
+        bubbles: true,
+        composed: true,
+        detail: searchText
+      });
+      this.dispatchEvent(searchEvent);
+    });
+
   }
 
   setActiveElement(element) {
@@ -159,5 +171,28 @@ class SidePanelComponent extends HTMLElement {
     });
     this.dispatchEvent(event);
   }
+
+
+  throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+
+    return function (...args) { //returned function replaces the original function to apply throttling
+      if (!lastRan) { // if the function not run before
+        func.apply(this, args);
+        lastRan = Date.now(); // update last execution time
+      } else { // if function has been run before
+        clearTimeout(lastFunc); // clear previous timer 
+        lastFunc = setTimeout(() => { // create new timer
+          if ((Date.now() - lastRan) >= limit) { // if specified time passed
+            func.apply(this, args); // run the function 
+            lastRan = Date.now(); // update last execution time
+          }
+        }, limit - (Date.now() - lastRan)); // wait for remaining time in the limit
+      }
+    };
+
+  }
 }
+
 customElements.define('side-panel-component', SidePanelComponent);

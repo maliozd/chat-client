@@ -1,6 +1,6 @@
 import { getCurrentUserInfo } from '../services/valueHelper.js';
 import { signalRConnection } from '../signalr.js';
-import { RECEIVE_FUNCTION_NAMES } from '../constants.js';
+import { EVENTS, RECEIVE_FUNCTION_NAMES } from '../constants.js';
 
 class MessagesComponent extends HTMLElement {
   constructor() {
@@ -20,6 +20,8 @@ class MessagesComponent extends HTMLElement {
   
   .message {
     display: flex;
+    flex-direction : column;
+    gap : 12px;
     align-items: flex-start;
     margin-bottom: 10px;
     margin:25px 10px;
@@ -45,13 +47,17 @@ class MessagesComponent extends HTMLElement {
     word-wrap: break-word;
     font-size:20px;
   }
-
+ 
+  
+  .message-info {
+     display:flex;
+     gap : 6px;
+     align-items : center;
+   }
 
   .timestamp {
     font-size: 10px;
     color: #999;
-    position: absolute;
-    bottom: -15px;
     right: 0;
     text-wrap: nowrap;
   }
@@ -60,7 +66,6 @@ class MessagesComponent extends HTMLElement {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    position: absolute;
     bottom: -15px;
     left: 0;
   }
@@ -80,6 +85,12 @@ class MessagesComponent extends HTMLElement {
     this._data = [];
     this._userId = getCurrentUserInfo().id;
 
+
+    // this._handleNewMessageReceived = this.__handleNewMessageReceived.bind(this);
+    // window.addEventListener(EVENTS.MESSAGE_RECEIVED, this._handleNewMessageReceived);
+    // window.addEventListener(EVENTS.ACTIVE_USER_CHAT_CHANGED, (event) => {
+    //   console.log("messages component : ", event);
+    // })
   }
 
   set data(value) {
@@ -99,6 +110,9 @@ class MessagesComponent extends HTMLElement {
   disconnectedCallback() {
   }
 
+  // _handleNewMessageReceived(message) {
+  //   console.log(message);
+  // }
   render() {
     if (getCurrentUserInfo())
       this._userId = getCurrentUserInfo().id;
@@ -110,9 +124,11 @@ class MessagesComponent extends HTMLElement {
       `<div class="message message-${parseInt(message.fromUserId) == parseInt(this._userId) ? 'self' : 'other'}">
         <div class="message-content">
           ${message.messageText}
-          <span class="timestamp">${new Date(message.timestamp).toLocaleString()}</span>
-          <span class="status-icon ${message.isRead ? 'status-read' : 'status-unread'}"></span>
-        </div>
+       </div>
+          <div class="message-info">
+             <span class="status-icon ${message.isRead ? 'status-read' : 'status-unread'}"></span>
+             <span class="timestamp">${new Date(message.timestamp).toLocaleString()}</span>
+          </div>
       </div>`
     ).join('');
     this.scrollToBottom();
@@ -122,6 +138,7 @@ class MessagesComponent extends HTMLElement {
     this._data.push(messageData);
     this.render();
   }
+
 
   scrollToBottom() {
     const messagesList = this.shadowRoot.querySelector('.messages');

@@ -1,8 +1,11 @@
 export const EVENTS = {
     ACTIVE_USER_CHAT_CHANGED: 'userSelected',
     MESSAGE_SENDED: 'messageSended',
+    MESSAGE_RECEIVED : "messageReceived",
     LOGIN_SUCCESS: 'loginSuccess',
+    SEARCHING_USER: 'searchingUser',
 };
+
 export const RECEIVE_FUNCTION_NAMES = {
     MESSAGE_RECEIVED : "MessageReceived",
     USER_CONNECTED: 'userConnected',
@@ -10,7 +13,7 @@ export const RECEIVE_FUNCTION_NAMES = {
 }
 export const INVOKE_FUNCTION_NAMES = {
     SEND_MESSAGE : "SendMessage",
-    WINDOW_STATE_CHANGED : "WindowStateChanged"
+    ONLINE_STATUS_CHANGED : "UserOnlineStatusChanged"
 }
 
 export const API_URLS = {

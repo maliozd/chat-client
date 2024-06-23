@@ -6,7 +6,9 @@ import { getCurrentUserInfo } from './src/services/valueHelper.js';
 import '../src/components/messageInputComponent.js'; // MessageInputComponent import edildi
 import '../src/components/sidePanelComponent.js';
 import { LocalStorageHelper } from './src/db/localStoageHelper.js';
-
+import { addInitialMessages, addMessage, getMessagesForUser, getLastMessageForUser } from './src/db/messageRepository.js';
+import { addInitialUsers, getUserById, getUsersByUsername } from './src/db/userRepository.js';
+import { initDatabase } from './src/db/database.js';
 const ls = new LocalStorageHelper();
 
 const messagesComponent = document.querySelector('message-list-component');
@@ -45,11 +47,14 @@ async function initializeData() {
         const messagesResponse = await fetchMessages();
         //şimdilik initial statik bir değer verdim
         //user & latest message
+        await initDatabase();
+        addInitialUsers(usersResponse);
+        addInitialMessages(messagesResponse.messages);
 
         const mappedUserLatestMessageData = mapUserLatestMessages(usersResponse, messagesResponse.messages);
         const mappedUserMessagesData = mapUserMessages(usersResponse, messagesResponse.messages);
 
-        ls.saveDataToLocalStorage(usersResponse, mappedUserLatestMessageData, messagesResponse.messages);
+        // ls.saveDataToLocalStorage(usersResponse, mappedUserLatestMessageData, messagesResponse.messages);
         sidePanelComponent.data = mappedUserLatestMessageData;
         messagesComponent.data = mappedUserMessagesData.messages;
 
@@ -65,57 +70,75 @@ document.querySelector('side-panel-component').addEventListener(EVENTS.ACTIVE_US
     const { activeUserId } = event.detail;
     console.log(activeUserId);
 
-    var userMessageData = ls.getUserMessagesFromStorage(parseInt(activeUserId));
-    console.log("qweqwew ",userMessageData);
-    messagesComponent.data = userMessageData == null ? [] : userMessageData.messages;
+    var userMessageData = getMessagesForUser(activeUserId);
+    messagesComponent.data = userMessageData == null ? [] : userMessageData;
     messageInputComponent.activeUserId = activeUserId;
-    var selectedUser = ls.getUserById(activeUserId);
+    // var selectedUser = ls.getUserById(activeUserId);
+    var selectedUser = getUserById(activeUserId)[0];
     activeChattingUserComponent.data = selectedUser;
 })
 
 messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
+    addMessage(message)
     messagesComponent.addNewMessage(event.detail);
 });
 
-//IDEA 
-//i can create a base class and initiliza signalR connection on that. 
-//and extend my components from base class that i created
-//connection and signal events can dispatching from that base component
-//connection can be managable on my components ? 
-//and my child components can listen that base component's events. 
+
+const handleSearch = throttle((event) => {
+    const searchText = event.detail;
+    var users = getUsersByUsername(searchText);
+    users.forEach((user) => {
+        console.log(getLastMessageForUser(user.id));
+        user.latestMessage = getLastMessageForUser(user.id)[0] ?? null;
+    });
+
+    sidePanelComponent.data = users;
+}, 400);
+
+sidePanelComponent.addEventListener(EVENTS.SEARCHING_USER, handleSearch);
+
+
 function clearLocalStorage() {
     localStorage.removeItem('access-token');
-    localStorage.removeItem('messages');
+    localStorage.removeItem('user_messages');
+    localStorage.removeItem('users');
     localStorage.removeItem('sidePanel_Data');
 }
 
 signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
     console.log(message);
-    ls.addNewMessageToUserMessages(parseInt(message.toUserId), message);
+    addMessage(message)
     if (messageInputComponent.activeUserId == message.fromUserId) {
         messagesComponent.addNewMessage(message);
     }
+});
 
+
+signalRConnection.on(RECEIVE_FUNCTION_NAMES.USER_ONLINE_STATUS_CHANGED, (userId, status) => {
+    const event = new CustomEvent('userOnlineStatusChanged', {
+        detail: { userId, status },
+        bubbles: true,
+        composed: true,
+    });
+    window.dispatchEvent(event);
 });
 
 const handleVisibilityChange = throttle(async () => {
     let isWindowVisible = document.visibilityState === "visible";
     console.log('window visible : ', isWindowVisible);
-    await signalRConnection.invoke(INVOKE_FUNCTION_NAMES.WINDOW_STATE_CHANGED, isWindowVisible);
+    await signalRConnection.invoke(INVOKE_FUNCTION_NAMES.ONLINE_STATUS_CHANGED, isWindowVisible);
 }, 5000); // 5 saniye
-
-
 document.addEventListener('visibilitychange', handleVisibilityChange);
 
 
 
 function throttle(func, limit) {
     let lastFunc;
-    let lastRan;  
-    
-    return function(...args) { //returned function replaces the original function to apply throttling
+    let lastRan;
+
+    return function (...args) { //returned function replaces the original function to apply throttling
         if (!lastRan) { // if the function not run before
-            func.apply(this, args); 
+            func.apply(this, args);
             lastRan = Date.now(); // update last execution time
         } else { // if function has been run before
             clearTimeout(lastFunc); // clear previous timer 

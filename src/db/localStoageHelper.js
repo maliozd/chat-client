@@ -26,7 +26,9 @@ export class LocalStorageHelper {
     getUserMessagesFromStorage(userId) {
         try {
             const userMessages = JSON.parse(localStorage.getItem('user_messages'));
+            console.log('userMessages : ', userMessages);
             var data = userMessages.filter(element => element.userId == userId)[0];
+            // var data = userMessages.filter(element => element.userId == userId)[0];
             console.log(data);
             if (!data)
                 return null;
