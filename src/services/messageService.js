@@ -1,6 +1,5 @@
 import { config } from '../../config.js';
 import { getLsToken } from './valueHelper.js';
-import { signalRConnection } from '../signalr.js'
 import { INVOKE_FUNCTION_NAMES, RECEIVE_FUNCTION_NAMES } from '../constants.js';
 import { LocalStorageHelper } from '../db/localStoageHelper.js';
 export async function fetchMessages() {
@@ -24,10 +23,7 @@ export async function fetchMessages() {
 }
 const ls = window.lsHelper;
 
-export async function sendChatMessage(message) {
-    await signalRConnection.invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
-    ls.addNewMessageToUserMessages(parseInt(message.toUserId), message);
-}
+
 
 /** 
 @param message dataModel

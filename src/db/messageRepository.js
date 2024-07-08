@@ -1,7 +1,7 @@
 import { executeQuery, executeUpdate } from './database.js';
 
 export function addMessage(id,fromUserId, toUserId, messageText,timestamp,isRead) {
-    const query = `INSERT INTO messages (id, fromUserId, toUserId, messageText, timestamp, is_read) VALUES (?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO messages (id, fromUserId, toUserId, messageText, timestamp, isRead) VALUES (?, ?, ?, ?, ?, ?)`;
     const params = [id,fromUserId, toUserId, messageText, timestamp, isRead];
     executeUpdate(query, params);
 }
@@ -12,7 +12,7 @@ export function getMessagesForUser(userId) {
 }
 
 export function markMessageAsRead(messageId) {
-    const query = `UPDATE messages SET is_read = 1 WHERE id = ?`;
+    const query = `UPDATE messages SET isRead = 1 WHERE id = ?`;
     executeUpdate(query, [messageId]);
 }
 

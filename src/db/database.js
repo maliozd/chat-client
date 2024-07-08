@@ -25,7 +25,7 @@ export async function initDatabase() {
             toUserId INTEGER,
             messageText TEXT,
             timestamp DATETIME,
-            is_read INTEGER
+            isRead INTEGER
         );
     `;
 

@@ -1,7 +1,7 @@
 import { getCurrentUserInfo } from '../services/valueHelper.js';
 import { EVENTS } from '../constants.js';
-import { sendChatMessage } from '../services/messageService.js';
-
+import { signalRConnection } from '../signalr.js'
+import { INVOKE_FUNCTION_NAMES } from '../constants.js';
 class MessageInputComponent extends HTMLElement {
     constructor() {
         super();
@@ -55,7 +55,7 @@ class MessageInputComponent extends HTMLElement {
                     timestamp: new Date()
                 };
                 // console.log(message);
-                await sendChatMessage(message);
+                await signalRConnection.invoke(INVOKE_FUNCTION_NAMES.SEND_MESSAGE, message);
                 inputField.value = '';
                 this.dispatchEvent(new CustomEvent(EVENTS.MESSAGE_SENDED, {
                     detail: message,

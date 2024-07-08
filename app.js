@@ -78,10 +78,6 @@ document.querySelector('side-panel-component').addEventListener(EVENTS.ACTIVE_US
     activeChattingUserComponent.data = selectedUser;
 })
 
-messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
-    addMessage(message)
-    messagesComponent.addNewMessage(event.detail);
-});
 
 
 const handleSearch = throttle((event) => {
@@ -104,6 +100,15 @@ function clearLocalStorage() {
     localStorage.removeItem('users');
     localStorage.removeItem('sidePanel_Data');
 }
+
+messageInputComponent.addEventListener(EVENTS.MESSAGE_SENDED, (event) => {
+    var msgToAdd = event.detail;
+    msgToAdd.id = 0;
+    msgToAdd.isRead = 0;
+    console.log(msgToAdd);
+    addMessage(0, msgToAdd.fromUserId, msgToAdd.toUserId, msgToAdd.messageText, new Date(msgToAdd.timestamp).toUTCString(), 0);
+    messagesComponent.addNewMessage(event.detail);
+});
 
 signalRConnection.on(RECEIVE_FUNCTION_NAMES.MESSAGE_RECEIVED, (message) => {
     console.log(message);
@@ -153,3 +158,7 @@ function throttle(func, limit) {
 }
 
 initialize();
+
+
+//TODO :bir userın onlineStatus u değişince db user last seen update edilecek
+//TODO : mesaj gönderdikten sonra mssql pk bilmediğim için sqlite db ye kaydedemiyorum. 
